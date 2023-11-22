@@ -1,9 +1,9 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import mediaRouter from "./routes/media-router.mjs";
-import userRouter from "./routes/user-router.mjs";
-import { logger } from "./middlewares/middlewares.mjs";
+import { logger } from './middlewares/middleware.mjs';
+import { getDishes } from "./controllers/dish-controller.mjs";
+
 
 const hostname = "127.0.0.1";
 const app = express();
@@ -23,7 +23,9 @@ app.use("/media", express.static(path.join(__dirname, "../uploads")));
 // simple custom middleware for logging/debugging all requests
 app.use(logger);
 
-app.get("/", (req, res) => {
+app.get("/", getDishes);
+
+app.get("/document", (req, res) => {
   const values = {
     title: "Dummy REST API for media",
     message: "Media will be displayed here",
@@ -31,11 +33,7 @@ app.get("/", (req, res) => {
   res.render("home", values);
 });
 
-// media endpoints
-app.use("/api/media", mediaRouter);
-
-// user endpoints
-app.use("/api/user", userRouter);
+// endpoints
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
