@@ -6,7 +6,7 @@ const fetchAllDishes = async () => {
 		FROM Dishes, Categories
 		WHERE Dishes.category_id = Categories.category_id;`
 		const [rows] = await promisePool.query(sql);
-		console.log('result', rows);
+		// console.log('result', rows);
 		return rows;
 	} catch (e) {
 		console.error('error', e.message);
