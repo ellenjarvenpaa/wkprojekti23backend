@@ -2,34 +2,30 @@ import { fetchAllDishes } from "../models/dish-model.mjs";
 
 const getDishes = async (req, res) => {
 	const rows = await fetchAllDishes();
-	// const categories = [];
-	// 	// create caategories array
-	// 	rows.forEach((row) => {
-	// 		if (!categories.includes(row.category_name)) {
-	// 			categories.push(row.category_name);
-	// 		}
-	// 	});
-	// 	console.log('categories includes', categories);
-
-	// 	// create object that includes category name and dishes of that caategory
-	// 	categories.forEach((category) => {
-
-	// 		const dishes = [];
-	// 		rows.forEach((row) => {
-
-	// 			if (row.category_name === category) {
-	// 				delete row.category_name;
-	// 				pullatDishes.push(row);
-	// 			}
-	// 		});
-	// 		const resultPullat = {
-	// 			category_name: 'pullat',
-	// 			dishes: pullatDishes
-	// 		};
-	// 		console.log(resultPullat);
-	// 	});
-
-	res.json(rows);
+	const result = [];
+	const categories = [];
+	// create an array of category names
+	rows.forEach((row) => {
+		if (categories.indexOf(row.category_name) === -1) {
+			categories.push(row.category_name);
+		}
+	});
+	// console.log('categories includes', categories);
+	// create object that includes category name and dishes of that category
+	categories.forEach((catName, i) => {
+		const categoryInfo = {};
+		categoryInfo.category_name = catName;
+		categoryInfo.dishes = [];
+		rows.forEach((row) => {
+			if (row.category_name === catName) {
+				delete row.category_name;
+				categoryInfo.dishes.push(row);
+			}
+		});
+		result.push(categoryInfo);
+	});
+	// console.log('result',result.length, result);
+	res.json(result);
 };
 
 

@@ -3,6 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { logger } from './middlewares/middleware.mjs';
 import { getDishes } from "./controllers/dish-controller.mjs";
+import { dishRouter } from "./routes/dish-router.mjs";
 
 
 const hostname = "127.0.0.1";
@@ -25,17 +26,19 @@ if (!process.env.NODE_ENV === 'development') {
   app.use(logger);
 }
 
-app.get("/", getDishes);
 
-app.get("/document", (req, res) => {
+
+app.get("/", (req, res) => {
   const values = {
-    title: "Dummy REST API for media",
-    message: "Media will be displayed here",
+    title: "Dummy REST API for dessert",
+    message: "",
   };
   res.render("home", values);
 });
 
 // endpoints
+app.use("/api/dish", dishRouter);
+
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
