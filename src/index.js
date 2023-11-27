@@ -22,9 +22,11 @@ app.use("/docs", express.static(path.join(__dirname, "../docs")));
 app.use("/media", express.static(path.join(__dirname, "../uploads")));
 
 // simple custom middleware for logging/debugging all requests
-if (!process.env.NODE_ENV === 'development') {
-  app.use(logger);
-}
+// if (!process.env.NODE_ENV === 'development') {
+//   app.use(logger);
+// }
+
+app.use(logger);
 
 
 

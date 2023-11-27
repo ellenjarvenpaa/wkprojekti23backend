@@ -1,8 +1,12 @@
 import express from "express";
-import { getDishes } from "../controllers/dish-controller.mjs";
+import { getDishById, getDishes } from "../controllers/dish-controller.mjs";
 
 const dishRouter = express.Router();
 
-dishRouter.route('/').get(getDishes);
+// routes for '/api/dish'
+dishRouter.route('/')
+    .get(getDishes);
+dishRouter.route('/:id')
+    .get(getDishById);
 
 export {dishRouter};

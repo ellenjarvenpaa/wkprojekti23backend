@@ -1,4 +1,4 @@
-import { fetchAllDishes } from "../models/dish-model.mjs";
+import { fetchAllDishes, fetchDishById } from "../models/dish-model.mjs";
 
 const getDishes = async (req, res) => {
 	const rows = await fetchAllDishes();
@@ -28,5 +28,20 @@ const getDishes = async (req, res) => {
 	res.json(result);
 };
 
+const getDishById = async (req, res) => {
+	const result = await fetchDishById(req.params.id);
+	// error handling
+  if (result) {
+    if(result.error) {
+      // serverilla on error
+      res.status(500);
+    }
+    res.json({dish: result});
+  } else {
+    res.status(404);
+    res.json({message: "dish not found", dish_id: req.params.id});
+  }
+}
 
-export {getDishes};
+
+export {getDishes, getDishById};
