@@ -1,9 +1,10 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import { logger } from './middlewares/middleware.mjs';
+import { errorHandler, logger, notFoundHandler } from './middlewares/middleware.mjs';
 import { getDishes } from "./controllers/dish-controller.mjs";
 import { dishRouter } from "./routes/dish-router.mjs";
+import { authRouter } from "./routes/auth-router.mjs";
 
 
 const hostname = "127.0.0.1";
@@ -39,7 +40,15 @@ app.get("/", (req, res) => {
 });
 
 // endpoints
-app.use("/api/dish", dishRouter);
+// auth endpoints
+app.use('/api/auth', authRouter);
+app.use('/api/dish', dishRouter);
+
+// error handlers
+// all other routes => 404
+app.use(notFoundHandler);
+// default error handler
+app.use(errorHandler);
 
 
 app.listen(port, hostname, () => {

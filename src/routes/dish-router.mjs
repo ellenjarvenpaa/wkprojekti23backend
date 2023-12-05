@@ -5,8 +5,8 @@ const dishRouter = express.Router();
 
 // routes for '/api/dish'
 dishRouter.route('/')
-    .get(getDishes);
+  .get(getDishes);
 dishRouter.route('/:id')
-    .get(getDishById);
+  .get(getDishById);
 
 export {dishRouter};
