@@ -1,10 +1,15 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import { logger } from "./middlewares/middleware.mjs";
+import {
+  errorHandler,
+  logger,
+  notFoundHandler,
+} from "./middlewares/middleware.mjs";
 import { getDishes } from "./controllers/dish-controller.mjs";
 import { dishRouter } from "./routes/dish-router.mjs";
 import cors from "cors";
+import { authRouter } from "./routes/auth-router.mjs";
 
 const hostname = "127.0.0.1";
 const app = express();
