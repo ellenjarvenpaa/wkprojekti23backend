@@ -59,23 +59,25 @@ VALUES ('juuso@gmail.com', 'juuso', 2),
     ('anni@gmail.com', 'juuso', 1);
 
 INSERT INTO Categories(category_name)
-VALUES ('juomat'), ('kakut'), ('pullat'), ('jaatelot'), ('kahvit');
+VALUES ('Jäätelöt'), ('Leivonnaiset'), ('Kakut'), ('Kylmät juomat'), ('Kuumat juomat');
 
 INSERT INTO Dishes(dish_name, dish_price, description, category_id)
-VALUES('Coca-cola', 3.5, 'Coca-cola', 1),
-    ('Fanta', 3.5, 'Fanta', 1),
-    ('Kinuskikakku', 4.5, 'Kinuski', 2),
-    ('Punainen sametti', 4.0, 'Punainen sametti kakku', 2),
-    ('Voisilmäpulla', 2.9, 'Voisilmäpulla', 3),
-    ('Korvapuusti', 2.9, 'Korvapuusti', 3),
-    ('Dallaspulla', 2.9, 'Dallaspulla', 3),
-    ('Pullapitko', 2.9, 'Pullapitko', 3),
-    ('Mango-meloni', 3.5, 'Mango-meloni', 4),
-    ('Vanilja', 3.5, 'Vanilja', 4),
-    ('Suklaa', 3.5, 'Suklaa', 4),
-    ('Americano', 3.5, 'Cappuccino', 5),
-    ('Latte', 3.5, 'Latte', 5),
-    ('Mocha', 3.5, 'Mocha', 5);
+VALUES('Mango-meloni', 3.5, 'Laktoositon, Gluteeniton', 1),
+    ('Vanilja', 3.5, 'Laktoositon, Gluteeniton', 1),
+    ('Suklaa', 3.5, 'Laktoositon, Gluteeniton', 1),
+    ('Voisilmäpulla', 2.9, 'Tehty omassa leipomossa', 2),
+    ('Korvapuusti', 2.9, 'Tehty omassa leipomossa', 2),
+    ('Dallaspulla', 2.9, 'Laktoositon', 2),
+    ('Pullapitko', 2.9, 'Tehty omassa leipomossa', 2),
+    ('Kinuskikakku', 4.5, 'Laktoositon', 3),
+    ('Punainen sametti', 4.0, 'Vegaaninen', 3),
+    ('Mansikka täytekakku', 4.0, 'Gluteeniton', 3),
+    ('Coca-cola', 3.5, 'Halutessa sokeriton', 4),
+    ('Fanta', 3.5, 'Halutessa sokeriton', 4),
+    ('Sprite', 3.5, 'Halutessa sokeriton', 4),
+    ('Americano', 3.5, 'Piristys päivään', 5),
+    ('Latte', 3.5, 'Pyydettäessä erikois maitoon', 5),
+    ('Mocha', 3.5, 'Pyydettäessä erikois maitoon', 5);
 
 --sale: cocacola, kinuskikakku, mango-meloni, americano, latte
 INSERT INTO Offers(dish_id, offer_price)
@@ -126,8 +128,8 @@ WHERE order_num=1;
 -- Hallitsija muokkaa annoksen tietoa
 UPDATE Dishes
 SET dish_name = 'Uusi jäätelö nimi', dish_price = 3.9,
-    description = 'Uusi jäätelö', category_id = 4
-WHERE dish_id = 11;
+    description = 'Uusi jäätelö', category_id = 1
+WHERE dish_id = 3;
 
 -- Muokkaa tarjouksen tietoa:
 UPDATE Offers

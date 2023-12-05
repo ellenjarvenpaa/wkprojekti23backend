@@ -1,10 +1,10 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import { logger } from './middlewares/middleware.mjs';
+import { logger } from "./middlewares/middleware.mjs";
 import { getDishes } from "./controllers/dish-controller.mjs";
 import { dishRouter } from "./routes/dish-router.mjs";
-
+import cors from "cors";
 
 const hostname = "127.0.0.1";
 const app = express();
@@ -12,6 +12,7 @@ const port = 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+app.use(cors());
 app.set("view engine", "pug");
 app.set("views", "src/views");
 
@@ -28,8 +29,6 @@ app.use("/media", express.static(path.join(__dirname, "../uploads")));
 
 app.use(logger);
 
-
-
 app.get("/", (req, res) => {
   const values = {
     title: "Dummy REST API for dessert",
@@ -40,7 +39,6 @@ app.get("/", (req, res) => {
 
 // endpoints
 app.use("/api/dish", dishRouter);
-
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
