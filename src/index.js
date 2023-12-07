@@ -8,7 +8,6 @@ import {
 } from "./middlewares/middleware.mjs";
 import { getDishes } from "./controllers/dish-controller.mjs";
 import { dishRouter } from "./routes/dish-router.mjs";
-import { mediaRouter } from "./routes/media-router.mjs";
 import cors from "cors";
 import { authRouter } from "./routes/auth-router.mjs";
 
@@ -45,8 +44,6 @@ app.get("/", (req, res) => {
 
 // endpoints
 app.use("/api/dish", dishRouter);
-
-app.use("api/media", mediaRouter);
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);

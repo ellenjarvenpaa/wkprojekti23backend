@@ -30,6 +30,9 @@ CREATE TABLE Dishes (
     dish_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     dish_price DECIMAL(6,2) NOT NULL,
     dish_name VARCHAR(255) NOT NULL,
+    dish_photo VARCHAR(255) NOT NULL,
+    filesize INT NOT NULL,
+    media_type VARCHAR(255) NOT NULL,
     description VARCHAR(255),
     category_id INT NOT NULL,
     created_at TIMESTAMP NOT NULL,
@@ -46,13 +49,13 @@ CREATE TABLE Offers (
     FOREIGN KEY (dish_id) REFERENCES Dishes(dish_id)
 );
 
--- payment_status: 'paid' tai 'unpaid'/ 'unpaid' eletuksena
--- order status: ??,
+-- payment_status: 'paid' tai 'unpaid'/ DEFAULT 'unpaid'
+-- order_status: 'pending', 'ready', 'picked up' / DEFAULT 'not ready'
 CREATE TABLE Orders (
     order_num INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     total_amount VARCHAR(255),
-    payment_status VARCHAR(255),
-    order_status VARCHAR(255) NOT NULL,
+    payment_status ENUM('paid', 'unpaid') DEFAULT 'unpaid',
+    order_status ENUM('preparing', 'ready', 'picked up') DEFAULT 'preparing',
     created_at TIMESTAMP NOT NULL,
     user_id INT,
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
@@ -68,6 +71,7 @@ CREATE TABLE OrderTicket (
     FOREIGN KEY (order_num) REFERENCES Orders(order_num),
     FOREIGN KEY (dish_id) REFERENCES Dishes(dish_id)
 );
+
 
 -- Lisää mock data
 INSERT INTO UserLevels(name, description)
@@ -86,7 +90,7 @@ VALUES ('juuso@gmail.com', 'juuso', 2),
 INSERT INTO Categories(category_name)
 VALUES ('Jäätelöt'), ('Leivonnaiset'), ('Kakut'), ('Kylmät juomat'), ('Kuumat juomat');
 
-INSERT INTO Dishes(dish_name, dish_price, description, category_id)
+INSERT INTO Dishes(dish_name, dish_price, description, category_id, dish_photo)
 VALUES('Mango-meloni', 3.5, 'Laktoositon, Gluteeniton', 1),
     ('Vanilja', 3.5, 'Laktoositon, Gluteeniton', 1),
     ('Suklaa', 3.5, 'Laktoositon, Gluteeniton', 1),
@@ -110,7 +114,7 @@ VALUES (1, 2.9, '2023-12-1', '2023-12-31'), (3, 2.9, '2023-12-1', '2023-12-31'),
 
 -- ORDER START: 1. 1pulla(dish id 5) first
 INSERT INTO Orders (order_status, total_amount, payment_status, user_id)
-    VALUES('pending', 2.9, 'unpaid', 2);
+    VALUES('preparing', 2.9, 'unpaid', 2);
 INSERT INTO OrderTicket(order_num, dish_id, dish_price, quantity)
 VALUES(1, 5, 2.9, 1);
 
@@ -131,7 +135,7 @@ UPDATE Orders SET payment_status='paid', order_status='preparing'
 WHERE order_num=1;
 
 -- 5. valmis noudettavaksi
-UPDATE Orders SET order_status='done'
+UPDATE Orders SET order_status='ready'
 WHERE order_num=1;
 -- ORDER END HERE
 
@@ -156,9 +160,9 @@ ORDER BY category_id;
 
 
 -- Käyttäjä tilaa annoksen, jolla id on 4 ????????? TODO: Miten lisää 2 taululle yhtä aika??
-INSERT INTO Orders(order_status) VALUES(0);
-INSERT INTO OrderTicket(order_num, dish_id, dish_price)
-VALUES(5, 4, 4);
+--- INSERT INTO Orders(order_status) VALUES(0);
+INSERT INTO OrderTicket(order_num, dish_id, dish_price, quantity)
+VALUES(5, 4, 4, 1);
 
 -- Hallitsija muokkaa annoksen tietoa
 UPDATE Dishes
