@@ -36,7 +36,7 @@ const getDishById = async (req, res) => {
       // serverilla on error
       res.status(500);
     }
-    res.json({dish: result});
+    res.json(result);
   } else {
     res.status(404);
     res.json({message: "dish not found", dish_id: req.params.id});
