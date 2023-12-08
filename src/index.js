@@ -1,5 +1,6 @@
 import express from "express";
 import path from "path";
+import cors from 'cors';
 import { fileURLToPath } from "url";
 import {
   errorHandler,
@@ -21,6 +22,7 @@ app.use(cors());
 app.set("view engine", "pug");
 app.set("views", "src/views");
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/docs", express.static(path.join(__dirname, "../docs")));
