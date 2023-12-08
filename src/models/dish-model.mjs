@@ -26,7 +26,7 @@ const fetchAllDishes = async () => {
  */
 const fetchDishById = async (id) => {
   try {
-    const sql = `SELECT dish_id, dish_name, dish_price, description
+    const sql = `SELECT dish_id, dish_name, dish_price, description, dish_photo
 		FROM Dishes WHERE dish_id = ?`;
     const params = [id];
     const [rows] = await promisePool.query(sql, params);

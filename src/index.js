@@ -9,7 +9,6 @@ import {
 } from "./middlewares/middleware.mjs";
 import { getDishes } from "./controllers/dish-controller.mjs";
 import { dishRouter } from "./routes/dish-router.mjs";
-import cors from "cors";
 import { authRouter } from "./routes/auth-router.mjs";
 
 const hostname = "127.0.0.1";
@@ -22,7 +21,6 @@ app.use(cors());
 app.set("view engine", "pug");
 app.set("views", "src/views");
 
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/docs", express.static(path.join(__dirname, "../docs")));
@@ -46,6 +44,16 @@ app.get("/", (req, res) => {
 
 // endpoints
 app.use("/api/dish", dishRouter);
+// auth endpoints
+app.use('/api/auth', authRouter);
+app.use('/api/dish', dishRouter);
+
+// error handlers
+// all other routes => 404
+app.use(notFoundHandler);
+// default error handler
+app.use(errorHandler);
+
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
