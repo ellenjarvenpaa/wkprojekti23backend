@@ -91,22 +91,22 @@ INSERT INTO Categories(category_name)
 VALUES ('Jäätelöt'), ('Leivonnaiset'), ('Kakut'), ('Kylmät juomat'), ('Kuumat juomat');
 
 INSERT INTO Dishes(dish_name, dish_price, description, category_id, dish_photo)
-VALUES('Mango-meloni', 3.5, 'Laktoositon, Gluteeniton', 1),
-    ('Vanilja', 3.5, 'Laktoositon, Gluteeniton', 1),
-    ('Suklaa', 3.5, 'Laktoositon, Gluteeniton', 1),
-    ('Voisilmäpulla', 2.9, 'Tehty omassa leipomossa', 2),
-    ('Korvapuusti', 2.9, 'Tehty omassa leipomossa', 2),
-    ('Dallaspulla', 2.9, 'Laktoositon', 2),
-    ('Pullapitko', 2.9, 'Tehty omassa leipomossa', 2),
-    ('Kinuskikakku', 4.5, 'Laktoositon', 3),
-    ('Punainen sametti', 4.0, 'Vegaaninen', 3),
-    ('Mansikka täytekakku', 4.0, 'Gluteeniton', 3),
-    ('Coca-cola', 3.5, 'Halutessa sokeriton', 4),
-    ('Fanta', 3.5, 'Halutessa sokeriton', 4),
-    ('Sprite', 3.5, 'Halutessa sokeriton', 4),
-    ('Americano', 3.5, 'Piristys päivään', 5),
-    ('Latte', 3.5, 'Pyydettäessä erikois maitoon', 5),
-    ('Mocha', 3.5, 'Pyydettäessä erikois maitoon', 5);
+VALUES('Mango-meloni', 3.5, 'Laktoositon, Gluteeniton', 1, 'd70016c421cf929684c5c3c2e14efbf7'),
+    ('Vanilja', 3.5, 'Laktoositon, Gluteeniton', 1, 'd5b3351da9701bf7183875ccf6ab157b'),
+    ('Suklaa', 3.5, 'Laktoositon, Gluteeniton', 1, 'fb6973e94f78bb02a294ae826bda2c3d'),
+    ('Voisilmäpulla', 2.9, 'Tehty omassa leipomossa', 2, 'b0da2e948a3a605412c874bf55b07081'),
+    ('Korvapuusti', 2.9, 'Tehty omassa leipomossa', 2, '617d8f21a3b55fdaef0c76e0e4d7f33a'),
+    ('Dallaspulla', 2.9, 'Laktoositon', 2, '76740e1797c1b618e66fe39066cd0a03'),
+    ('Pullapitko', 2.9, 'Tehty omassa leipomossa', 2, 'f5b94a86e791e137f92cc73b359ac07f'),
+    ('Kinuskikakku', 4.5, 'Laktoositon', 3, 'e3d6948eaf321a45cfa61f264efdf9a3'),
+    ('Punainen sametti', 4.0, 'Vegaaninen', 3, 'c038ded38adcf04863130b976fa13b2b'),
+    ('Mansikka täytekakku', 4.0, 'Gluteeniton', 3, 'fc59ad5ee62ad782a375e932f7ed1183'),
+    ('Coca-cola', 3.5, 'Halutessa sokeriton', 4, '8bd62f93f91f8f5fda2d5cdbd738a078'),
+    ('Fanta', 3.5, 'Halutessa sokeriton', 4, '52ab0cada95b493a4897fedb1cd51c3e'),
+    ('Sprite', 3.5, 'Halutessa sokeriton', 4, 'dbb0a4dbdf7526414d366ef2f410a1bf'),
+    ('Americano', 3.5, 'Piristys päivään', 5, '7fda39be6fac103af0a5eb3ce9cdadfb'),
+    ('Latte', 3.5, 'Pyydettäessä erikois maitoon', 5, 'cbc141b3cd0dbedac60dfa7d8dfbbdf1'),
+    ('Mocha', 3.5, 'Pyydettäessä erikois maitoon', 5, '56f8c57e52f4f55adcc459a5ccd94d76');
 
 --sale: cocacola, kinuskikakku, mango-meloni, americano, latte
 INSERT INTO Offers(dish_id, offer_price, start_date, end_date)
@@ -177,3 +177,24 @@ SET offer_price = 1.9 WHERE dish_id = 1;
 -- Poista tarjousannos
 DELETE FROM Offers
 WHERE dish_id = 1;
+
+LOCK TABLES `dishes` WRITE;
+/*!40000 ALTER TABLE `dishes` DISABLE KEYS */;
+INSERT INTO `dishes` VALUES
+(1,3.50,'Mango-meloni','d70016c421cf929684c5c3c2e14efbf7',519145,'image/png','Laktoositon, Gluteeniton',1,'2023-12-07 12:32:01'),
+(2,3.50,'Vanilja','d5b3351da9701bf7183875ccf6ab157b',2453083,'image/png','Laktoositon, Gluteeniton',1,'2023-12-07 12:33:19'),
+(3,3.50,'Suklaa','fb6973e94f78bb02a294ae826bda2c3d',591211,'image/png','Laktoositon, Gluteeniton',1,'2023-12-07 12:34:29'),
+(4,2.90,'Voisilmäpulla','b0da2e948a3a605412c874bf55b07081',1270866,'image/png','Tehty omassa leipomossa',2,'2023-12-07 12:37:27'),
+(5,2.90,'Korvapuusti','617d8f21a3b55fdaef0c76e0e4d7f33a',2086723,'image/png','Tehty omassa leipomossa',2,'2023-12-07 12:38:39'),
+(6,2.90,'Dallaspulla','76740e1797c1b618e66fe39066cd0a03',1174465,'image/png','Laktoositon',2,'2023-12-07 12:39:34'),
+(8,4.00,'Kinuskikakku','e3d6948eaf321a45cfa61f264efdf9a3',553390,'image/png','Laktoositon',3,'2023-12-07 12:41:34'),
+(9,4.00,'Punainen sametti','c038ded38adcf04863130b976fa13b2b',413896,'image/png','Vegaaninen',3,'2023-12-07 12:43:12'),
+(10,4.00,'Mansikka täytekakku','fc59ad5ee62ad782a375e932f7ed1183',958408,'image/png','Gluteeniton',3,'2023-12-07 12:44:41'),
+(11,3.50,'Coca-cola','8bd62f93f91f8f5fda2d5cdbd738a078',71542,'image/png','Halutessa sokeriton',4,'2023-12-07 12:46:10'),
+(12,3.50,'Sprite','dbb0a4dbdf7526414d366ef2f410a1bf',115057,'image/png','Halutessa sokeriton',4,'2023-12-07 12:46:51'),
+(13,3.50,'Fanta','52ab0cada95b493a4897fedb1cd51c3e',91165,'image/png','Halutessa sokeriton',4,'2023-12-07 12:48:32'),
+(14,3.50,'Americano','7fda39be6fac103af0a5eb3ce9cdadfb',204754,'image/png','Piristys päivään',5,'2023-12-07 12:49:36'),
+(15,3.50,'Latte','cbc141b3cd0dbedac60dfa7d8dfbbdf1',425403,'image/png','Pyydettäessä erikois maitoon',5,'2023-12-07 12:50:15'),
+(16,3.50,'Mocha','56f8c57e52f4f55adcc459a5ccd94d76',36688,'image/png','Pyydettäessä erikois maitoon',5,'2023-12-07 12:50:56');
+/*!40000 ALTER TABLE `dishes` ENABLE KEYS */;
+UNLOCK TABLES;
