@@ -6,7 +6,6 @@ import {
   logger,
   notFoundHandler,
 } from "./middlewares/middleware.mjs";
-import { getDishes } from "./controllers/dish-controller.mjs";
 import { dishRouter } from "./routes/dish-router.mjs";
 import cors from "cors";
 import { authRouter } from "./routes/auth-router.mjs";

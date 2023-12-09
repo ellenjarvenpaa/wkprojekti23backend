@@ -77,4 +77,43 @@ const addDish = async (media) => {
   }
 };
 
-export { fetchAllDishes, fetchDishById, addDish };
+/**
+ * Update dish info in database
+ *
+ * @param {number} dish_id - id of the dish to be updated
+ * @param {object} data - object containing all information about the dish
+ * @returns {object} - object containing success status and message
+ */
+
+const updateDishById = async (dish_id, data) => {
+  try {
+    const result = await promisePool.query(
+      `
+      UPDATE Dishes
+      SET dish_name = ?, dish_price = ?, dish_photo = ?, filesize = ?, media_type = ?, description = ?, category_id = ?
+      WHERE dish_id = ?
+    `,
+      [
+        data.dish_name,
+        data.dish_price,
+        data.dish_photo,
+        data.filesize,
+        data.media_type,
+        data.description,
+        data.category_id,
+        dish_id,
+      ]
+    );
+
+    if (result.affectedRows > 0) {
+      return { success: true };
+    } else {
+      return { success: false, message: "Dish not found." };
+    }
+  } catch (error) {
+    console.error("Database error:", error);
+    return { success: false, message: "Internal Server Error" };
+  }
+};
+
+export { fetchAllDishes, fetchDishById, addDish, updateDishById };

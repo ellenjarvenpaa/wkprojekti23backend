@@ -3,6 +3,7 @@ import {
   getDishById,
   getDishes,
   postDish,
+  updateDish,
 } from "../controllers/dish-controller.mjs";
 import upload from "../middlewares/upload.mjs";
 
@@ -13,6 +14,6 @@ dishRouter
   .route("/")
   .get(getDishes)
   .post(upload.single("dish_photo"), postDish);
-dishRouter.route("/:id").get(getDishById);
+dishRouter.route("/:id").get(getDishById).put(updateDish);
 
 export { dishRouter };

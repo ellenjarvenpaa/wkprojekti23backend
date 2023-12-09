@@ -2,6 +2,7 @@ import {
   fetchAllDishes,
   fetchDishById,
   addDish,
+  updateDishById,
 } from "../models/dish-model.mjs";
 
 const getDishes = async (req, res) => {
@@ -74,4 +75,40 @@ const postDish = async (req, res) => {
   }
 };
 
-export { getDishes, getDishById, postDish };
+const updateDish = async (req, res, dish_id) => {
+  let body = [];
+
+  req
+    .on("error", (err) => {
+      console.error(err);
+    })
+    .on("data", (chunk) => {
+      body.push(chunk);
+    })
+    .on("end", async () => {
+      body = Buffer.concat(body).toString();
+      console.log("req body", body);
+
+      try {
+        body = JSON.parse(body);
+
+        if (!body.dish_name || !body.dish_price) {
+          res.status(400).json({ message: "Missing required data." });
+          return;
+        }
+
+        const result = await updateDishById(dish_id, body);
+
+        if (result.success) {
+          res.status(200).json({ message: `Dish with id ${dish_id} updated.` });
+        } else {
+          res.status(404).json({ message: "Dish not found." });
+        }
+      } catch (error) {
+        console.error("error", error);
+        res.status(500).json({ error: "Internal Server Error" });
+      }
+    });
+};
+
+export { getDishes, getDishById, postDish, updateDish };
