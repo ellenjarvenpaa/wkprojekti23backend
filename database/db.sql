@@ -42,10 +42,13 @@ CREATE TABLE Dishes (
 CREATE TABLE Offers (
     offer_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     dish_id INT NOT NULL,
-    offer_price DECIMAL(6,2) NOT NULL,
+    -- offer_price DECIMAL(6,2) NOT NULL,
+    reduction DECIMAL(6,2) NOT NULL,
+    CHECK (reduction BETWEEN 0 AND 1),
     created_at TIMESTAMP NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
+    CHECK (start_date <= end_date),
     FOREIGN KEY (dish_id) REFERENCES Dishes(dish_id)
 );
 
@@ -108,9 +111,6 @@ VALUES('Mango-meloni', 3.5, 'Laktoositon, Gluteeniton', 1, 'd70016c421cf929684c5
     ('Latte', 3.5, 'Pyydettäessä erikois maitoon', 5, 'cbc141b3cd0dbedac60dfa7d8dfbbdf1'),
     ('Mocha', 3.5, 'Pyydettäessä erikois maitoon', 5, '56f8c57e52f4f55adcc459a5ccd94d76');
 
---sale: cocacola, kinuskikakku, mango-meloni, americano, latte
-INSERT INTO Offers(dish_id, offer_price, start_date, end_date)
-VALUES (1, 2.9, '2023-12-1', '2023-12-31'), (3, 2.9, '2023-12-1', '2023-12-31'), (9, 1.9, '2023-12-1', '2023-12-31'), (12, 2.9, '2023-12-1', '2023-12-31'), (13, 2.9, '2023-12-1', '2023-12-31');
 
 -- ORDER START: 1. 1pulla(dish id 5) first
 INSERT INTO Orders (order_status, total_amount, payment_status, user_id)
@@ -139,24 +139,35 @@ UPDATE Orders SET order_status='ready'
 WHERE order_num=1;
 -- ORDER END HERE
 
---how about user delete item?
 
 -- Kysely
 -- Valitse kakki katergoriat
 SELECT category_name FROM Categories;
-
 
 --Valitse kakki tarjouksen annosten nimet, hinnat ja kuvaus
 SELECT Dishes.dish_id, Dishes.dish_name, offer_price, description
 FROM Dishes, Offers
 WHERE Offers.dish_id=Dishes.dish_id;
 
--- Valitse kaikki annosten nimet ja niiden ajankohtaiset hinnat sekä normaalihinnat, kuvaus
+-- Valitse kaikki annosten nimet ja niiden ale hinnat sekä normaalihinnat, kuvaus
 -- järjestys kategorian id:n mukaan
-SELECT Dishes.dish_id, dish_name, IFNULL(Offers.offer_price, dish_price) AS current_price, Offers.offer_price, dish_price, description, category_id
-FROM Dishes LEFT JOIN Offers
-ON Dishes.dish_id = Offers.dish_id
-ORDER BY category_id;
+SELECT
+    Dishes.dish_id,
+    dish_name,
+    ROUND((1-Offers.reduction)*dish_price,2) AS offer_price,
+    dish_price,
+    dish_photo,
+    description,
+    Categories.category_name
+FROM
+    Dishes
+LEFT JOIN Offers
+ON Dishes.dish_id = Offers.dish_id AND '2023-12-11' BETWEEN start_date AND end_date
+INNER JOIN Categories
+ON Categories.category_id = Dishes.category_id
+GROUP BY
+    Dishes.dish_id, dish_name, dish_price, dish_photo, description, Categories.category_name
+ORDER BY Dishes.category_id;
 
 
 -- Käyttäjä tilaa annoksen, jolla id on 4 ????????? TODO: Miten lisää 2 taululle yhtä aika??
@@ -178,6 +189,8 @@ SET offer_price = 1.9 WHERE dish_id = 1;
 DELETE FROM Offers
 WHERE dish_id = 1;
 
+
+
 LOCK TABLES `dishes` WRITE;
 /*!40000 ALTER TABLE `dishes` DISABLE KEYS */;
 INSERT INTO `dishes` VALUES
@@ -198,3 +211,21 @@ INSERT INTO `dishes` VALUES
 (16,3.50,'Mocha','56f8c57e52f4f55adcc459a5ccd94d76',36688,'image/png','Pyydettäessä erikois maitoon',5,'2023-12-07 12:50:56');
 /*!40000 ALTER TABLE `dishes` ENABLE KEYS */;
 UNLOCK TABLES;
+
+
+INSERT INTO Offers(dish_id, reduction, start_date, end_date)
+VALUES(1, 0.2, '2023-12-07', '2023-12-31');
+INSERT INTO Offers(dish_id, reduction, start_date, end_date)
+VALUES(2, 0.7, '2023-12-07', '2023-12-31');
+INSERT INTO Offers(dish_id, reduction, start_date, end_date)
+VALUES(15, 0.1, '2023-12-07', '2023-12-31');
+
+
+SELECT Dishes.dish_id, dish_name, Dishes.dish_price,
+ROUND(Dishes.dish_price*(1-reduction), 2) AS offer_price, description, dish_photo
+FROM Offers, Dishes
+WHERE Offers.dish_id = Dishes.dish_id
+AND '2023-12-11' BETWEEN start_date AND end_date
+GROUP BY Dishes.dish_id
+ORDER BY MIN(offer_price);
+
