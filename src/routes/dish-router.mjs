@@ -5,6 +5,7 @@ import {
   getDishes,
   getOffers,
   postDish,
+  updateDish,
 } from "../controllers/dish-controller.mjs";
 import upload from "../middlewares/upload.mjs";
 import { authenticateToken } from "../middlewares/authentication.mjs";
@@ -20,7 +21,8 @@ dishRouter.route('/offers')
   .get(authenticateToken, getOffers);
 dishRouter.route('/logged')
   .get(authenticateToken, getDishWithOffers);
-dishRouter.route("/:id").get(getDishById);
+dishRouter.route("/:id").get(getDishById).put(updateDish);
+
 
 
 export { dishRouter };
