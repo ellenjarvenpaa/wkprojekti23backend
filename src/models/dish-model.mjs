@@ -49,19 +49,20 @@ const addDish = async (media) => {
   const {
     filename,
     size,
-    mimetype,
+    mimetype: media_type,
     dish_name,
     dish_price,
     description,
     category_id,
   } = media;
   console.log(media);
-  const sql = `INSERT INTO Dishes (dish_photo, filesize, media_type, dish_name, dish_price, description, category_id)
+  const sql = `INSERT INTO Dishes (dish_photo, filesize, media_type,
+    dish_name, dish_price, description, category_id)
                VALUES (?, ?, ?, ?, ?, ?, ?)`;
   const params = [
     filename,
     size,
-    mimetype,
+    media_type,
     dish_name,
     dish_price,
     description,
@@ -84,32 +85,23 @@ const addDish = async (media) => {
  * @param {object} data - object containing all information about the dish
  * @returns {object} - object containing success status and message
  */
-
 const updateDishById = async (dish_id, data) => {
+  const sql = `UPDATE Dishes SET dish_name = ?, dish_price = ?, dish_photo = ?, filesize = ?,
+  media_type = ?, description = ?, category_id = ? WHERE dish_id = ?`;
+  const params = [
+    data.dish_name,
+    data.dish_price,
+    data.dish_photo,
+    data.filesize,
+    data.media_type,
+    data.description,
+    data.category_id,
+    dish_id,
+  ];
   try {
-    const result = await promisePool.query(
-      `
-      UPDATE Dishes
-      SET dish_name = ?, dish_price = ?, dish_photo = ?, filesize = ?, media_type = ?, description = ?, category_id = ?
-      WHERE dish_id = ?
-    `,
-      [
-        data.dish_name,
-        data.dish_price,
-        data.dish_photo,
-        data.filesize,
-        data.media_type,
-        data.description,
-        data.category_id,
-        dish_id,
-      ]
-    );
-
-    if (result.affectedRows > 0) {
-      return { success: true };
-    } else {
-      return { success: false, message: "Dish not found." };
-    }
+    const result = await promisePool.query(sql, params);
+    console.log("result", result);
+    return { dish_id: result[0].insertId };
   } catch (error) {
     console.error("Database error:", error);
     return { success: false, message: "Internal Server Error" };

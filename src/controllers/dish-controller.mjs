@@ -49,7 +49,7 @@ const getDishById = async (req, res) => {
 };
 
 const postDish = async (req, res) => {
-  const { filename, size, mimetype } = req.file;
+  const { filename, size, media_type } = req.file;
   console.log(req.file);
   const { dish_name, dish_price, description, category_id } = req.body;
   console.log(req.body);
@@ -57,7 +57,7 @@ const postDish = async (req, res) => {
     const result = await addDish({
       filename,
       size,
-      mimetype,
+      media_type,
       dish_name,
       dish_price,
       description,
@@ -75,40 +75,41 @@ const postDish = async (req, res) => {
   }
 };
 
-const updateDish = async (req, res, dish_id) => {
-  let body = [];
-
-  req
-    .on("error", (err) => {
-      console.error(err);
-    })
-    .on("data", (chunk) => {
-      body.push(chunk);
-    })
-    .on("end", async () => {
-      body = Buffer.concat(body).toString();
-      console.log("req body", body);
-
-      try {
-        body = JSON.parse(body);
-
-        if (!body.dish_name || !body.dish_price) {
-          res.status(400).json({ message: "Missing required data." });
-          return;
-        }
-
-        const result = await updateDishById(dish_id, body);
-
-        if (result.success) {
-          res.status(200).json({ message: `Dish with id ${dish_id} updated.` });
-        } else {
-          res.status(404).json({ message: "Dish not found." });
-        }
-      } catch (error) {
-        console.error("error", error);
-        res.status(500).json({ error: "Internal Server Error" });
-      }
-    });
+const updateDish = async (req, res, next) => {
+  // check xem co req.user ko, neu co thi la dang nhap
+  // req.user is added by authenticateToken middleware
+  const dish_id = req.params.id;
+  const { dish_name, dish_price, description, category_id } = req.body;
+  let dish_photo = "",
+    filesize = 0,
+    media_type = "";
+  if (req.file) {
+    dish_photo = req.file.filename;
+    filesize = req.file.size;
+    media_type = req.file.media_type;
+  }
+  if (dish_name || dish_price || description || category_id || dish_photo) {
+    const updatedDishes = {
+      dish_name,
+      dish_price,
+      dish_photo,
+      filesize,
+      media_type,
+      description,
+      category_id,
+      dish_id,
+    };
+    console.log(updatedDishes);
+    const result = await updateDishById(dish_id, updatedDishes);
+    console.log(result);
+    res.status(200).json({ message: "Dish updated.", ...result });
+  } else {
+    const error = new Error(
+      "Missing required data. Please provide at least one field for update."
+    );
+    error.status = 400;
+    res.status(400).json({ message: error.message });
+  }
 };
 
 export { getDishes, getDishById, postDish, updateDish };
