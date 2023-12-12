@@ -1,7 +1,8 @@
 import { promisePool } from "../utils/database.mjs";
 
 /**
- * fetch all dishes info from database
+ * Fetch all dishes info from database
+ *
  * @returns {object} - object containing list of menu according to categories
  *
  */
@@ -20,10 +21,13 @@ const fetchAllDishes = async () => {
 };
 
 /**
- * fetch dish info by id
+ * Fetch dish info by id
+ *
  * @param {*} id - dish id
  * @returns {object} dish - object containing dish info
+ *
  */
+
 const fetchDishById = async (id) => {
   try {
     const sql = `SELECT dish_id, dish_name, dish_price, description, dish_photo
@@ -44,12 +48,13 @@ const fetchDishById = async (id) => {
  *
  * @param {object} media - object containing all information about the new media item
  * @returns {object} - object containing id of the inserted media item in db
+ *
  */
 const addDish = async (media) => {
   const {
-    filename,
-    size,
-    mimetype: media_type,
+    dish_photo,
+    filesize,
+    media_type,
     dish_name,
     dish_price,
     description,
@@ -60,8 +65,8 @@ const addDish = async (media) => {
     dish_name, dish_price, description, category_id)
                VALUES (?, ?, ?, ?, ?, ?, ?)`;
   const params = [
-    filename,
-    size,
+    dish_photo,
+    filesize,
     media_type,
     dish_name,
     dish_price,
@@ -78,6 +83,13 @@ const addDish = async (media) => {
   }
 };
 
+/**
+ * Fetches offers from database
+ *
+ * @param {object} date - date of the day
+ * @returns - object containing list of offers
+ *
+ */
 
 const fetchOffers = async (date) => {
   try {
@@ -85,7 +97,7 @@ const fetchOffers = async (date) => {
     // ROUND(Dishes.dish_price*(1-reduction), 2) AS offer_price, description, dish_photo
     // FROM Offers, Dishes
     // WHERE Offers.dish_id = Dishes.dish_id;`;
-    console.log('model date', date);
+    console.log("model date", date);
     const sql = `
       SELECT Dishes.dish_id, dish_name, Dishes.dish_price,
         ROUND(Dishes.dish_price*(1-reduction), 2) AS offer_price, description, dish_photo
@@ -95,13 +107,20 @@ const fetchOffers = async (date) => {
       GROUP BY Dishes.dish_id
       ORDER BY MIN(offer_price);`;
     const [rows] = await promisePool.query(sql);
-    console.log('result', rows);
+    console.log("result", rows);
     return rows;
   } catch (e) {
     console.error("error", e.message);
     return { error: e.message };
   }
 };
+
+/**
+ * Fetches dishes with offers from database
+ *
+ * @returns - object containing list of dishes with offers
+ *
+ */
 
 const fetchDishesWithOffers = async () => {
   try {
@@ -123,12 +142,11 @@ const fetchDishesWithOffers = async () => {
     const [rows] = await promisePool.query(sql);
     // console.log('result', rows);
     return rows;
-  } catch (e){
+  } catch (e) {
     console.error("error", e.message);
     return { error: e.message };
   }
 };
-
 
 /**
  * Update dish info in database
@@ -136,6 +154,7 @@ const fetchDishesWithOffers = async () => {
  * @param {number} dish_id - id of the dish to be updated
  * @param {object} data - object containing all information about the dish
  * @returns {object} - object containing success status and message
+ *
  */
 const updateDishById = async (dish_id, data) => {
   const sql = `UPDATE Dishes SET dish_name = ?, dish_price = ?, dish_photo = ?, filesize = ?,
@@ -160,4 +179,35 @@ const updateDishById = async (dish_id, data) => {
   }
 };
 
-export { fetchAllDishes, fetchDishById, addDish, fetchOffers, fetchDishesWithOffers, updateDishById };
+/**
+ * Delete dish from database
+ *
+ * @param {number} dish_id - id of the dish to be deleted
+ * @returns {object} - object containing success status and message
+ *
+ */
+
+const deleteDishById = async (dish_id) => {
+  const sql = `ALTER TABLE Offers DROP FOREIGN KEY offers_ibfk_1`;
+  `ALTER TABLE Offers ADD CONSTRAINT offers_ibfk_1 FOREIGN KEY
+  dish_id REFERENCES Dishes dish_id ON DELETE CASCADE`;
+  const params = [dish_id];
+  try {
+    const result = await promisePool.query(sql, params);
+    console.log("result", result);
+    return { dish_id: result[0].insertId };
+  } catch (error) {
+    console.error("Database error:", error);
+    return { success: false, message: "Internal Server Error" };
+  }
+};
+
+export {
+  fetchAllDishes,
+  fetchDishById,
+  addDish,
+  fetchOffers,
+  fetchDishesWithOffers,
+  updateDishById,
+  deleteDishById,
+};

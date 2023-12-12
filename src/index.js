@@ -1,6 +1,6 @@
 import express from "express";
 import path from "path";
-import cors from 'cors';
+import cors from "cors";
 import { fileURLToPath } from "url";
 import {
   errorHandler,
@@ -44,15 +44,14 @@ app.get("/", (req, res) => {
 // endpoints
 app.use("/api/dish", dishRouter);
 // auth endpoints
-app.use('/api/auth', authRouter);
-app.use('/api/dish', dishRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/dish", dishRouter);
 
 // error handlers
 // all other routes => 404
 app.use(notFoundHandler);
 // default error handler
 app.use(errorHandler);
-
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);

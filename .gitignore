@@ -3,5 +3,6 @@ uploads/
 !uploads/.gitkeep
 database/create-user.sql
 .env
+docs/
 
 ```

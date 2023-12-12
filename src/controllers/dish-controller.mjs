@@ -5,6 +5,7 @@ import {
   fetchOffers,
   fetchDishesWithOffers,
   updateDishById,
+  deleteDishById,
 } from "../models/dish-model.mjs";
 
 const resDataForDishes = (rows) => {
@@ -124,8 +125,6 @@ const getDishWithOffers = async (req, res, next) => {
 };
 
 const updateDish = async (req, res, next) => {
-  // check xem co req.user ko, neu co thi la dang nhap
-  // req.user is added by authenticateToken middleware
   const dish_id = req.params.id;
   const { dish_name, dish_price, description, category_id } = req.body;
   let dish_photo = "",
@@ -160,6 +159,13 @@ const updateDish = async (req, res, next) => {
   }
 };
 
+const deleteDish = async (req, res, next) => {
+  const dish_id = req.params.id;
+  const result = await deleteDishById(dish_id);
+  console.log(result);
+  res.status(200).json({ message: "Dish deleted.", ...result });
+};
+
 export {
   getDishes,
   getDishById,
@@ -167,4 +173,5 @@ export {
   getOffers,
   getDishWithOffers,
   updateDish,
+  deleteDish,
 };
