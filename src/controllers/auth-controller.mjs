@@ -28,7 +28,7 @@ const postLogin = async (req, res, next) => {
   } else if (user.error) {
       return next(new Error(user.error));
   } else {
-    // user löytyy
+    // user found -> compare pw
     const match = await bcrypt.compare(req.body.password, user.password);
     console.log('postLogin', user);
     if (match) {

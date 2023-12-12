@@ -78,6 +78,58 @@ const addDish = async (media) => {
   }
 };
 
+
+const fetchOffers = async (date) => {
+  try {
+    // const sql = `SELECT Dishes.dish_id, dish_name, Dishes.dish_price,
+    // ROUND(Dishes.dish_price*(1-reduction), 2) AS offer_price, description, dish_photo
+    // FROM Offers, Dishes
+    // WHERE Offers.dish_id = Dishes.dish_id;`;
+    console.log('model date', date);
+    const sql = `
+      SELECT Dishes.dish_id, dish_name, Dishes.dish_price,
+        ROUND(Dishes.dish_price*(1-reduction), 2) AS offer_price, description, dish_photo
+      FROM Offers, Dishes
+      WHERE Offers.dish_id = Dishes.dish_id
+      AND '${date}' BETWEEN start_date AND end_date
+      GROUP BY Dishes.dish_id
+      ORDER BY MIN(offer_price);`;
+    const [rows] = await promisePool.query(sql);
+    console.log('result', rows);
+    return rows;
+  } catch (e) {
+    console.error("error", e.message);
+    return { error: e.message };
+  }
+};
+
+const fetchDishesWithOffers = async () => {
+  try {
+    const sql = `SELECT
+        Dishes.dish_id,
+        dish_name,
+        ROUND((1-Offers.reduction)*dish_price,2) AS offer_price,
+        dish_price,
+        dish_photo,
+        description,
+        Categories.category_name
+      FROM
+        Dishes
+      LEFT JOIN Offers
+        ON Dishes.dish_id = Offers.dish_id
+      INNER JOIN Categories
+        ON Categories.category_id = Dishes.category_id
+      ORDER BY Dishes.category_id;`;
+    const [rows] = await promisePool.query(sql);
+    // console.log('result', rows);
+    return rows;
+  } catch (e){
+    console.error("error", e.message);
+    return { error: e.message };
+  }
+};
+
+
 /**
  * Update dish info in database
  *
@@ -108,4 +160,4 @@ const updateDishById = async (dish_id, data) => {
   }
 };
 
-export { fetchAllDishes, fetchDishById, addDish, updateDishById };
+export { fetchAllDishes, fetchDishById, addDish, fetchOffers, fetchDishesWithOffers, updateDishById };

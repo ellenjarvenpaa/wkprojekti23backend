@@ -2,11 +2,12 @@ import {
   fetchAllDishes,
   fetchDishById,
   addDish,
+  fetchOffers,
+  fetchDishesWithOffers,
   updateDishById,
 } from "../models/dish-model.mjs";
 
-const getDishes = async (req, res) => {
-  const rows = await fetchAllDishes();
+const resDataForDishes = (rows) => {
   const result = [];
   const categories = [];
   // create an array of category names
@@ -29,7 +30,15 @@ const getDishes = async (req, res) => {
     });
     result.push(categoryInfo);
   });
-  // console.log('result',result.length, result);
+  return result;
+};
+
+const getDishes = async (req, res) => {
+  const rows = await fetchAllDishes();
+  if (rows.error) {
+    return next(new Error(result.error));
+  }
+  const result = resDataForDishes(rows);
   res.json(result);
 };
 
@@ -75,6 +84,84 @@ const postDish = async (req, res) => {
   }
 };
 
+// api/dish/offers
+const getOffers = async (req, res, next) => {
+  // req.user is added by authenticateToken middleware
+  if (req.user) {
+    console.log("user", req.user);
+    const today = new Date().toISOString();
+    console.log("today is", today);
+    const date = today.slice(0, 10);
+    console.log(date);
+    const rows = await fetchOffers(date);
+    if (rows.error) {
+      return next(new Error(rows.error));
+    }
+    res.json({ offer_dishes: rows });
+  } else {
+    const error = new Error("unauthorized");
+    error.status = 401;
+    next(error);
+  }
+};
+
+// api/dish/logged
+const getDishWithOffers = async (req, res, next) => {
+  // req.user is added by authenticateToken middleware
+  if (req.user) {
+    console.log("user", req.user);
+    const rows = await fetchDishesWithOffers();
+    if (rows.error) {
+      return next(new Error(result.error));
+    }
+    const result = resDataForDishes(rows);
+    res.json(result);
+  } else {
+    const error = new Error("unauthorized");
+    error.status = 401;
+    next(error);
+  }
+};
+
+// api/dish/offers
+const getOffers = async (req, res, next) => {
+  // req.user is added by authenticateToken middleware
+  if (req.user) {
+    console.log("user", req.user);
+    const today = new Date().toISOString();
+    console.log("today is", today);
+    const date = today.slice(0, 10);
+    console.log(date);
+    const rows = await fetchOffers(date);
+    if (rows.error) {
+      return next(new Error(rows.error));
+    }
+    res.json({ offer_dishes: rows });
+  } else {
+    const error = new Error("unauthorized");
+    error.status = 401;
+    next(error);
+  }
+};
+
+// api/dish/logged
+const getDishWithOffers = async (req, res, next) => {
+  // req.user is added by authenticateToken middleware
+  if (req.user) {
+    console.log("user", req.user);
+    const rows = await fetchDishesWithOffers();
+    if (rows.error) {
+      return next(new Error(result.error));
+    }
+    const result = resDataForDishes(rows);
+    res.json(result);
+  } else {
+    const error = new Error("unauthorized");
+    error.status = 401;
+    next(error);
+  }
+};
+
 const updateDish = async (req, res, next) => {
   // check xem co req.user ko, neu co thi la dang nhap
   // req.user is added by authenticateToken middleware
@@ -112,4 +199,11 @@ const updateDish = async (req, res, next) => {
   }
 };
 
-export { getDishes, getDishById, postDish, updateDish };
+export {
+  getDishes,
+  getDishById,
+  postDish,
+  getOffers,
+  getDishWithOffers,
+  updateDish,
+};
