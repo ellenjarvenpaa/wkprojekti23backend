@@ -109,3 +109,9 @@ VALUES (3.50,'Mango-meloni','9aaf7d80c19f07da157f91c6015c0721',519145,'image/png
 (3.50,'Americano','904b37025a834d570a2c0f368b3285c5',3662441,'image/png','Piristys p├ñiv├ñ├ñn',5),
 (3.50,'Latte','1df333deb57c595cd5d7d263b22bc4af',425403,'image/png','Pyydettäessä erikois maitoon',5),
 (3.50,'Mocha','b4fe0d8920675a1572fa273fcd28c1a1',36688,'image/png','Pyydettäessä erikois maitoon',5);
+INSERT INTO Offers(dish_id, reduction, start_date, end_date)
+VALUES(1, 0.2, '2023-12-07', '2023-12-31');
+INSERT INTO Offers(dish_id, reduction, start_date, end_date)
+VALUES(2, 0.7, '2023-12-07', '2023-12-31');
+INSERT INTO Offers(dish_id, reduction, start_date, end_date)
+VALUES(15, 0.1, '2023-12-07', '2023-12-31');

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Agbalumo&family=Caprasimo&display=swap" rel="stylesheet">
+    <title>Vite + TS</title>
+    <script type="module" crossorigin src="./assets/main-0e43c09e.js"></script>
+    <link rel="stylesheet" href="./assets/index-48c312f6.css">
+  </head>
+  <body>
+    <div class="container">
+      <nav>
+        <ul class="nav">
+          <li class="nav-item discount hidden">
+            <a href="#offer">
+              <img class="nav-img" src="./assets/discounts-promotion-e3557d6d.png" alt="discounts-promotion">
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="./IP_kassa_html/icecream.html">
+              <img class="nav-img" src="./assets/ice-cream-ce12ea08.png" alt="ice-cream">
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="./IP_kassa_html/pastry.html">
+              <img class="nav-img" src="./assets/mhancha-pastry-395d396d.png" alt="pastry">
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="./IP_kassa_html/cake.html">
+              <img class="nav-img" src="./assets/cake-slice-f9666e4e.png" alt="cake-slice">
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="./IP_kassa_html/cold_drinks.html">
+              <img class="nav-img" src="./assets/iced-coffee-7800ffa6.png" alt="cold-drinks">
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="./IP_kassa_html/hot-drinks.html">
+              <img class="nav-img" src="./assets/tea-cup-d2282e4c.png" alt="hot-drinks">
+            </a>
+          </li>
+          <li class="nav-item" id="profile-icon">
+            <img class="nav-img" src="./assets/account-daaf9c48.png" alt="profile">
+          </li>
+          <li class="nav-item" id="shopping-cart-icon">
+            <img class="nav-img" src="./assets/shopping-cart-4c873603.png" alt="shopping-cart">
+          </li>
+        </ul>
+      </nav>
+      <main>
+        <h1 class="title"><a href="./index.html">Jälkkäri</a></h1>
+        <div class="menu-container">
+          <ul class="menu-items">
+          </ul>
+        </div>
+      </main>
+    </div>
+    <dialog id="product-info-dialog">
+      <section class="product-info">
+        <h2>Tuotetiedot</h2>
+        <div class="info-item">
+        </div>
+        <div class="quantity-container">
+          <h3>Määrä</h3>
+          <div class="quantity">
+            <button id="quantity-minus" class="button" type="button">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACASURBVGhD7dPBDoIwEEXR7hDc6LcDKnyfroRvgPf2mDhshoR7krvttKUUAAAAAADw01Xdk/Ls3S5qVB81J+XZg/Jewh5qOUidCmmUb2BrsYwmVau/He0AXxU6gPVqa7GMWhXmH+el3sqfMCPPfqpK7ebndEsq/GwAAAAAADiHUla54M8qiMKcCAAAAABJRU5ErkJggg==" alt="minus sign">
+            </button>
+            <input type="number" class="quantity-number" value="1">
+            <button id="quantity-plus" class="button" type="button">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAE2SURBVGhD7ZhLTsMwFEUzK4UJ7QooS+bTH8trGfXDClC5R8rI8kN2QHq29I50Jo0S5yZOc50hCILgN+5Hu+NOvsvP0bfxt274kLfEneyCB3mVaYCL7GI6LeWXTAMQaiGbh5PkaqcBzvJRNk8E8CYCeBMBvIkA3lAlrAAuVYIT4qqW+iytLrSSuX0sGXsy1N+9pA4zeKn0oG+ZBuA3guX2sWRsWuykKr6W6Ul4yXqiCuYqVyB3MA95fuaymNYCnGRVAGBJmDuYh6+yGh6crTxKbmGp3DnrIWZbbh9Lxt7ImZwM04kXUKlP0vobZVtuH8vqafMfNPciq4UXkBWAq9o8EcCbCOBNBPAmAnjT/cdd6/M6d6CLKgEsRdMAtMpuoIqzDKQOH+SL/FMl9oI67FKJgyDogmH4AVDmeq5/Ko9AAAAAAElFTkSuQmCC" alt="plus sign">
+            </button>
+          </div>
+        </div>
+        <div class="buttons">
+          <button type="button" class="button" id="back-btn-info">Takaisin</button>
+          <button type="button" class="button" id="addtocart-btn">Lisää ostoskoriin</button>
+        </div>
+      </section>
+    </dialog>
+    <dialog id="login-dialog">
+      <section>
+        <h2 id="login-title">Kirjautuminen</h2>
+        <form id="login-form" class="form">
+            <label class="required" for="membernumber">Jäsennumero</label><br>
+            <input id="membernumber" type="number" name="membernumber" minlength="4" required><br>
+            <label class="required" for="loginpassword">Salasana</label><br>
+            <input id="loginpassword" type="password" name="loginpassword" required><br>
+            <div class="buttons">
+              <button type="button" class="button" id="back-btn-login">Takaisin</button>
+              <button type="submit" class="button" id="login">Kirjaudu sisään</button>
+            </div>
+        </form>
+      </section>
+    </dialog>
+    <dialog id="shopping-cart-dialog">
+      <section class="shopping-cart">
+          <h2>Ostoskori</h2>
+          <div class="menu-item">
+            <img class="menu-img" src="./assets/cocacola-324417fe.png" alt="Coca-Cola drink">
+            <div>
+              <p class="menu-item-name">Coca-Cola Zero</p>
+              <p class="menu-item-desc">Jotain tietoa</p>
+              <p class="menu-item-price">3,5 &#x20AC;</p>
+            </div>
+          </div>
+          <div class="buttons">
+            <button type="button" class="button" id="back-btn-cart">Takaisin</button>
+            <button type="button" class="button" id="paymentbtn">Maksamaan</button>
+          </div>
+      </section>
+    </dialog>
+    <dialog id="info">
+
+    </dialog>
+  </body>
+</html>
