@@ -59,7 +59,7 @@ const getDishById = async (req, res) => {
 };
 
 const postDish = async (req, res) => {
-  const { filename, size, media_type } = req.file;
+  const { filename, size, mimetype } = req.file;
   console.log(req.file);
   const { dish_name, dish_price, description, category_id } = req.body;
   console.log(req.body);
@@ -67,7 +67,7 @@ const postDish = async (req, res) => {
     const result = await addDish({
       filename,
       size,
-      media_type,
+      mimetype,
       dish_name,
       dish_price,
       description,

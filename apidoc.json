@@ -1,0 +1,17 @@
+{
+    "name": "Jälkkäri API docs",
+    "version": "0.3.0",
+    "description": "API documentation for Web-kehitysprojekti",
+    "title": "Jälkkäri API docs",
+    "url" : "http://127.0.0.1:3000/api/",
+    "order": [
+      "GetDishes",
+      "GetDishById",
+      "GetOffers",
+      "GetDishesWithOffers"
+    ],
+    "template": {
+      "withCompare": true,
+      "withGenerator": true
+    }
+  }

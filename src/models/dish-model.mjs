@@ -8,7 +8,7 @@ import { promisePool } from "../utils/database.mjs";
  */
 const fetchAllDishes = async () => {
   try {
-    const sql = `SELECT dish_id, dish_name, dish_price, description, dish_photo, Categories.category_name
+    const sql = `SELECT dish_id, dish_name, dish_price, description, dish_photo, Categories.category_name, Categories.category_id
 		FROM Dishes, Categories
 		WHERE Dishes.category_id = Categories.category_id;`;
     const [rows] = await promisePool.query(sql);
@@ -52,22 +52,22 @@ const fetchDishById = async (id) => {
  */
 const addDish = async (media) => {
   const {
-    dish_photo,
-    filesize,
-    media_type,
+    filename,
+    size,
+    mimetype,
     dish_name,
     dish_price,
     description,
     category_id,
   } = media;
-  console.log(media);
+  console.log("media", media);
   const sql = `INSERT INTO Dishes (dish_photo, filesize, media_type,
     dish_name, dish_price, description, category_id)
                VALUES (?, ?, ?, ?, ?, ?, ?)`;
   const params = [
-    dish_photo,
-    filesize,
-    media_type,
+    filename,
+    size,
+    mimetype,
     dish_name,
     dish_price,
     description,

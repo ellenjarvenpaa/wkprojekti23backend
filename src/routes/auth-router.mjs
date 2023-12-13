@@ -3,18 +3,10 @@ import { body } from "express-validator";
 import { postLogin } from "../controllers/auth-controller.mjs";
 import { postUser } from "../controllers/user-controller.mjs";
 
-const authRouter = express.Router();
-
 // routes for /api/auth
 
-/**
- * POST endpoint for login
- * @name POST/api/auth/login
- * @param {string} membernumber - membernumber of the user
- * @param {string} password - password of the user
- * @returns {object} - object containing user info and token
- * @example response - HTTP 200 OK
- */
+const authRouter = express.Router();
+
 authRouter
   .route("/login")
   .post(
