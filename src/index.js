@@ -25,6 +25,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/docs", express.static(path.join(__dirname, "../docs")));
 // serve uploaded mediafiles url: /media/{file}
 app.use("/media", express.static(path.join(__dirname, "../uploads")));
+app.use("/", express.static(path.join(__dirname, "../frontend")));
+
 
 // simple custom middleware for logging/debugging all requests
 // if (!process.env.NODE_ENV === 'development') {
@@ -33,13 +35,6 @@ app.use("/media", express.static(path.join(__dirname, "../uploads")));
 
 app.use(logger);
 
-app.get("/", (req, res) => {
-  const values = {
-    title: "Dummy REST API for dessert",
-    message: "",
-  };
-  res.render("home", values);
-});
 
 // endpoints
 app.use("/api/dish", dishRouter);
