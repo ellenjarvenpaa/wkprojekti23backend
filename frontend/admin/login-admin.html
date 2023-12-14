@@ -9,23 +9,27 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Agbalumo&family=Caprasimo&display=swap" rel="stylesheet">
   <title>Hallinta</title>
-  <script type="module" crossorigin src="../assets/style-50bee6af.js"></script>
-  <script type="module" crossorigin src="../assets/admin-720cbcc2.js"></script>
-  <link rel="stylesheet" href="../assets/style-48c312f6.css">
+  <script type="module" crossorigin src="../assets/adminLogin-eed5ec3a.js"></script>
+  <link rel="modulepreload" crossorigin href="../assets/style-ce433336.js">
+  <link rel="modulepreload" crossorigin href="../assets/function-19f4931a.js">
+  <link rel="stylesheet" href="../assets/style-77080e39.css">
 </head>
 <body>
   <div class="center">
     <div class="login-admin">
       <h2>Kirjaudu sisään</h2>
       <form id="login-form-admin" class="form">
-        <label class="required" for="user-name">Käyttäjänimi</label><br>
-        <input id="" type="text" name="user-name" required><br>
-        <label class="required" for="password">Salasana</label><br>
-        <input id="" type="password" name="password" required><br>
+        <label class="required" for="emailadmin">Sähköposti</label><br>
+        <input type="email" name="emailadmin" required><br>
+        <label class="required" for="passwordadmin">Salasana</label><br>
+        <input type="password" name="passwordadmin" required><br>
 
-        <input type="submit" value="Kirjaudu sisään" class="button" required><br>
+        <button id="login-admin" type="submit" class="button">Kirjaudu sisään</button><br>
       </form>
     </div>
   </div>
+  <dialog id="info">
+
+  </dialog>
 </body>
 </html>
