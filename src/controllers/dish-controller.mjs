@@ -66,25 +66,24 @@ const getDishById = async (req, res, next) => {
   }
 };
 
+
 const postDish = async (req, res, next) => {
-  const { filename, size, media_type } = req.file;
+  const { filename, size, mimetype } = req.file;
   console.log(req.file);
   const { dish_name, dish_price, description, category_id } = req.body;
   console.log(req.body);
   const user_level_id = req.user.user_level_id;
-  const user_id = req.user.user_id;
   //admin can add dish
   if (user_level_id === 2 || user_level_id === 1) {
     if (filename && dish_name && dish_price) {
       const result = await addDish({
         filename,
         size,
-        media_type,
+        mimetype,
         dish_name,
         dish_price,
         description,
         category_id,
-        user_id
       });
       if (result.dish_id) {
         res.status(201);
@@ -95,7 +94,7 @@ const postDish = async (req, res, next) => {
       }
     } else {
       res.sendStatus(400);
-    }
+    };
   } else {
     const error = new Error('you are not an admin');
     error.status = 401;
