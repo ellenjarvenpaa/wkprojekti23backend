@@ -10,7 +10,10 @@ import {
   postOffer,
 } from "../controllers/dish-controller.mjs";
 import upload from "../middlewares/upload.mjs";
-import { authenticateToken, authenticateToken2 } from "../middlewares/authentication.mjs";
+import {
+  authenticateToken,
+  authenticateToken2,
+} from "../middlewares/authentication.mjs";
 
 const dishRouter = express.Router();
 
@@ -248,7 +251,8 @@ dishRouter
 }
  *
  */
-dishRouter.route("/offers")
+dishRouter
+  .route("/offers")
   .get(authenticateToken, getOffers)
   .post(authenticateToken, postOffer);
 /**
@@ -454,6 +458,10 @@ dishRouter.route("/logged").get(authenticateToken, getDishWithOffers);
  *
  *
  */
-dishRouter.route("/:id").get(authenticateToken2, getDishById).put(updateDish).delete(deleteDish);
+dishRouter
+  .route("/:id")
+  .get(authenticateToken2, getDishById)
+  .put(upload.single("dish_photo"), updateDish)
+  .delete(deleteDish);
 
 export { dishRouter };
