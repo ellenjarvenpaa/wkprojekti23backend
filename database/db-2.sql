@@ -81,13 +81,6 @@ VALUES ('super admin', 'kaikki oikeus'),
     ('admin', 'admin hallinta paitsi poista/luoda käyttäjä'),
     ('user', 'normaali käyttäjä');
 
-INSERT INTO Users(email, password, user_level_id)
-VALUES ('juuso@gmail.com', 'juuso', 2),
-    ('sofia@gmail.com', 'sofia1', 3),
-    ('jaska@gmail.com', 'jaska1', 3),
-    ('simosimo@gmail.com', 'simosimo', 3),
-    ('Jakem@gmail.com', 'jakem', 3),
-    ('anni@gmail.com', 'juuso', 1);
 
 INSERT INTO Categories(category_name)
 VALUES ('Jäätelöt'), ('Leivonnaiset'), ('Kakut'), ('Kylmät juomat'), ('Kuumat juomat');
