@@ -42,8 +42,8 @@ CREATE TABLE Dishes (
 CREATE TABLE Offers (
     offer_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     dish_id INT NOT NULL,
-    -- offer_price DECIMAL(6,2) NOT NULL,
     reduction DECIMAL(6,2) NOT NULL,
+    active BOOLEAN NOT NULL,
     CHECK (reduction BETWEEN 0 AND 1),
     created_at TIMESTAMP NOT NULL,
     start_date DATE NOT NULL,
@@ -109,9 +109,17 @@ VALUES (3.50,'Mango-meloni','9aaf7d80c19f07da157f91c6015c0721',519145,'image/png
 (3.50,'Americano','904b37025a834d570a2c0f368b3285c5',3662441,'image/png','Piristys p├ñiv├ñ├ñn',5),
 (3.50,'Latte','1df333deb57c595cd5d7d263b22bc4af',425403,'image/png','Pyydettäessä erikois maitoon',5),
 (3.50,'Mocha','b4fe0d8920675a1572fa273fcd28c1a1',36688,'image/png','Pyydettäessä erikois maitoon',5);
-INSERT INTO Offers(dish_id, reduction, start_date, end_date)
-VALUES(1, 0.2, '2023-12-07', '2023-12-31');
-INSERT INTO Offers(dish_id, reduction, start_date, end_date)
-VALUES(2, 0.7, '2023-12-07', '2023-12-31');
-INSERT INTO Offers(dish_id, reduction, start_date, end_date)
-VALUES(15, 0.1, '2023-12-07', '2023-12-31');
+INSERT INTO Offers(dish_id, reduction, start_date, end_date, active)
+VALUES(1, 0.2, '2023-12-07', '2023-12-31', 1);
+INSERT INTO Offers(dish_id, reduction, start_date, end_date, active)
+VALUES(2, 0.7, '2023-12-07', '2023-12-31', 1);
+INSERT INTO Offers(dish_id, reduction, start_date, end_date, active)
+VALUES(2, 0.1, '2023-12-07', '2023-12-31', 0);
+INSERT INTO Offers(dish_id, reduction, start_date, end_date, active)
+VALUES(15, 0.1, '2023-12-07', '2023-12-31', 1);
+
+UPDATE Offers
+SET active = 0
+WHERE dish_id = 5;
+INSERT INTO Offers(dish_id, reduction, start_date, end_date, active)
+VALUES(5, 0.1, '2023-12-07', '2023-12-31', 1);

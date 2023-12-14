@@ -1,7 +1,7 @@
 import express from "express";
 import { body } from "express-validator";
-import { postLogin } from "../controllers/auth-controller.mjs";
-import { postUser } from "../controllers/user-controller.mjs";
+import { postLogin, postLoginAdmin } from "../controllers/auth-controller.mjs";
+import { postAdmin, postUser } from "../controllers/user-controller.mjs";
 
 const authRouter = express.Router();
 
@@ -21,7 +21,13 @@ authRouter
     body("membernumber").trim().isLength({ min: 4 }),
     body("password").trim().isLength({ min: 4, max: 4 }),
     postLogin
-  );
+  )
+authRouter
+  .route("/login/admin")
+  .post(
+    body("email").trim().isEmail(),
+    body("password").trim().isLength({ min: 4, max: 4 }),
+    postLoginAdmin);
 
 /**
  * POST endpoint for register
@@ -37,6 +43,13 @@ authRouter
     body("email").trim().isEmail(),
     body("password").trim().isLength({ min: 4, max: 4 }),
     postUser
+  );
+authRouter
+  .route("/register-admin")
+  .post(
+    body("email").trim().isEmail(),
+    body("password").trim().isLength({ min: 4, max: 4 }),
+    postAdmin
   );
 
 export { authRouter };

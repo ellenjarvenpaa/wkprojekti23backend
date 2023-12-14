@@ -162,7 +162,9 @@ SELECT
 FROM
     Dishes
 LEFT JOIN Offers
-ON Dishes.dish_id = Offers.dish_id AND '2023-12-11' BETWEEN start_date AND end_date
+ON Dishes.dish_id = Offers.dish_id
+AND '2023-12-11' BETWEEN start_date AND end_date
+AND Offers.active = 1
 INNER JOIN Categories
 ON Categories.category_id = Dishes.category_id
 GROUP BY

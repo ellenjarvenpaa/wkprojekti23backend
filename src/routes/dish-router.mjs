@@ -7,9 +7,10 @@ import {
   postDish,
   updateDish,
   deleteDish,
+  postOffer,
 } from "../controllers/dish-controller.mjs";
 import upload from "../middlewares/upload.mjs";
-import { authenticateToken } from "../middlewares/authentication.mjs";
+import { authenticateToken, authenticateToken2 } from "../middlewares/authentication.mjs";
 
 const dishRouter = express.Router();
 
@@ -25,8 +26,8 @@ const dishRouter = express.Router();
 dishRouter
   .route("/")
   .get(getDishes)
-  .post(upload.single("dish_photo"), postDish)
-  .put(upload.single("dish_photo"), updateDish);
+  .post(authenticateToken, upload.single("dish_photo"), postDish)
+  .put(authenticateToken, upload.single("dish_photo"), updateDish);
 
 /**
  * GET endpoint for offers
@@ -35,8 +36,9 @@ dishRouter
  * @example response - HTTP 200 OK
  *
  */
-dishRouter.route("/offers").get(authenticateToken, getOffers);
-
+dishRouter.route("/offers")
+  .get(authenticateToken, getOffers)
+  .post(authenticateToken, postOffer);
 /**
  * GET endpoint for dishes with offers
  * @name GET/api/dish/logged
@@ -52,6 +54,6 @@ dishRouter.route("/logged").get(authenticateToken, getDishWithOffers);
  * @returns {object} - object containing dish info
  * @example response - HTTP 200 OK
  */
-dishRouter.route("/:id").get(getDishById).put(updateDish).delete(deleteDish);
+dishRouter.route("/:id").get(authenticateToken2, getDishById).put(updateDish).delete(deleteDish);
 
 export { dishRouter };

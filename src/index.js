@@ -27,13 +27,14 @@ app.use("/docs", express.static(path.join(__dirname, "../docs")));
 app.use("/media", express.static(path.join(__dirname, "../uploads")));
 app.use("/", express.static(path.join(__dirname, "../frontend")));
 
+// Reduce Fingerprinting (security)
+app.disable('x-powered-by');
 
-// simple custom middleware for logging/debugging all requests
-// if (!process.env.NODE_ENV === 'development') {
-//   app.use(logger);
-// }
+//simple custom middleware for logging/debugging all requests
+if (!process.env.NODE_ENV !== 'production') {
+  app.use(logger);
+}
 
-app.use(logger);
 
 
 // endpoints

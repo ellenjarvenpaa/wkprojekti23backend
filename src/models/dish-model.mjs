@@ -43,6 +43,33 @@ const fetchDishById = async (id) => {
   }
 };
 
+const fetchDishByIdLogged = async (id) => {
+  try {
+    const sql = `SELECT
+    Dishes.dish_id,
+    dish_name,
+    ROUND((1-Offers.reduction)*dish_price,2) AS offer_price,
+    dish_price,
+    dish_photo,
+    description
+  FROM
+      Dishes
+  LEFT JOIN Offers
+    ON Dishes.dish_id = Offers.dish_id
+    AND '2023-12-11' BETWEEN start_date AND end_date
+    AND Offers.active = 1
+  WHERE Dishes.dish_id = ${id}`;
+    const params = [id];
+    const [rows] = await promisePool.query(sql, params);
+    console.log("rows", rows);
+    console.log("rows 0", rows[0]);
+    return rows[0];
+  } catch (e) {
+    console.error("error", e.message);
+    return { error: e.message };
+  }
+};
+
 /**
  * Add new media item to database
  *
@@ -104,8 +131,7 @@ const fetchOffers = async (date) => {
       FROM Offers, Dishes
       WHERE Offers.dish_id = Dishes.dish_id
       AND '${date}' BETWEEN start_date AND end_date
-      GROUP BY Dishes.dish_id
-      ORDER BY MIN(offer_price);`;
+      AND active = 1`;
     const [rows] = await promisePool.query(sql);
     console.log("result", rows);
     return rows;
@@ -133,11 +159,15 @@ const fetchDishesWithOffers = async () => {
         description,
         Categories.category_name
       FROM
-        Dishes
+          Dishes
       LEFT JOIN Offers
         ON Dishes.dish_id = Offers.dish_id
+        AND '2023-12-11' BETWEEN start_date AND end_date
+        AND Offers.active = 1
       INNER JOIN Categories
         ON Categories.category_id = Dishes.category_id
+      GROUP BY
+          Dishes.dish_id, dish_name, dish_price, dish_photo, description, Categories.category_name
       ORDER BY Dishes.category_id;`;
     const [rows] = await promisePool.query(sql);
     // console.log('result', rows);
@@ -202,6 +232,46 @@ const deleteDishById = async (dish_id) => {
   }
 };
 
+// const addOfferByDishId = async (offer) => {
+//   try {
+//     const {dish_id, reduction, start_date, end_date} = offer;
+//     const sql = `INSERT INTO Offers(dish_id, reduction, start_date, end_date, active)
+//     VALUES(?, ?, ?, ?, ?);`;
+//     const params = [dish_id, reduction, start_date, end_date, 1];
+//     const result = await promisePool.query(sql, params);
+//     console.log("result", result);
+//     return result[0].insertId;
+//   } catch (e) {
+//     console.error("error", e.message);
+//     return { error: e.message };
+//   }
+// }
+
+// first, set active = 0 to all rows with the dish id to be inserted,
+// then insert dish new offer
+const addOfferByDishId = async (offer) => {
+  const connection = await promisePool.getConnection();
+  let result;
+  try {
+    const {dish_id, reduction, start_date, end_date} = offer;
+    await connection.beginTransaction();
+    const sql1 = `UPDATE Offers SET active = 0 WHERE dish_id = ${dish_id};`;
+    const result1 = await connection.query(sql1);
+    console.log(result1);
+    const sql2 = `INSERT INTO Offers(dish_id, reduction, start_date, end_date, active)
+    VALUES(?, ?, ?, ?, ?);`;
+    const params = [dish_id, reduction, start_date, end_date, 1];
+    const result2 = await connection.query(sql2, params);
+    result = result2[0].insertId;
+    await connection.commit();
+  } catch (e) {
+    await connection.rollback();
+    console.error("error", e.message);
+    return { error: e.message };
+  }
+  return result;
+}
+
 export {
   fetchAllDishes,
   fetchDishById,
@@ -210,4 +280,6 @@ export {
   fetchDishesWithOffers,
   updateDishById,
   deleteDishById,
+  addOfferByDishId,
+  fetchDishByIdLogged
 };

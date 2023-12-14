@@ -6,6 +6,8 @@ import {
   fetchDishesWithOffers,
   updateDishById,
   deleteDishById,
+  addOfferByDishId,
+  fetchDishByIdLogged,
 } from "../models/dish-model.mjs";
 
 const resDataForDishes = (rows) => {
@@ -43,13 +45,19 @@ const getDishes = async (req, res) => {
   res.json(result);
 };
 
-const getDishById = async (req, res) => {
-  const result = await fetchDishById(req.params.id);
+const getDishById = async (req, res, next) => {
+  // if user is not logged in
+  let result;
+  if (!req.user) {
+     result = await fetchDishById(req.params.id);
+  } else {
+     result = await fetchDishByIdLogged(req.params.id);
+  }
   // error handling
   if (result) {
-    if (result.error) {
+    if(result.error) {
       // serverilla on error
-      res.status(500);
+      next(new Error(result.error));
     }
     res.json(result);
   } else {
@@ -58,31 +66,42 @@ const getDishById = async (req, res) => {
   }
 };
 
-const postDish = async (req, res) => {
+const postDish = async (req, res, next) => {
   const { filename, size, media_type } = req.file;
   console.log(req.file);
   const { dish_name, dish_price, description, category_id } = req.body;
   console.log(req.body);
-  if (filename && dish_name && dish_price) {
-    const result = await addDish({
-      filename,
-      size,
-      media_type,
-      dish_name,
-      dish_price,
-      description,
-      category_id,
-    });
-    if (result.dish_id) {
-      res.status(201);
-      res.json({ message: "New media dish added.", ...result });
+  const user_level_id = req.user.user_level_id;
+  const user_id = req.user.user_id;
+  //admin can add dish
+  if (user_level_id === 2 || user_level_id === 1) {
+    if (filename && dish_name && dish_price) {
+      const result = await addDish({
+        filename,
+        size,
+        media_type,
+        dish_name,
+        dish_price,
+        description,
+        category_id,
+        user_id
+      });
+      if (result.dish_id) {
+        res.status(201);
+        res.json({ message: "New media dish added.", ...result });
+      } else {
+        res.status(500);
+        res.json(result);
+      }
     } else {
-      res.status(500);
-      res.json(result);
+      res.sendStatus(400);
     }
   } else {
-    res.sendStatus(400);
+    const error = new Error('you are not an admin');
+    error.status = 401;
+    return next(error);
   }
+
 };
 
 // api/dish/offers
@@ -105,6 +124,26 @@ const getOffers = async (req, res, next) => {
     next(error);
   }
 };
+
+// api/dish/offers/:id for admin
+const postOffer = async (req, res, next) => {
+  if (req.user) {
+    console.log("user", req.user);
+    console.log('request body', req.body);
+    const newOffer = req.body;
+    const newOfferId = await addOfferByDishId(newOffer);
+    if (newOfferId.error) {
+      return next(new Error(newOfferId.error));
+    }
+    res.json({ message: "offer added", offer_id: newOfferId });
+  } else {
+    const error = new Error("unauthorized");
+    error.status = 401;
+    next(error);
+  }
+}
+
+
 
 // api/dish/logged
 const getDishWithOffers = async (req, res, next) => {
@@ -174,4 +213,5 @@ export {
   getDishWithOffers,
   updateDish,
   deleteDish,
+  postOffer
 };
