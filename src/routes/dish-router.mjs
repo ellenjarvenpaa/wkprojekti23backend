@@ -10,7 +10,10 @@ import {
   postOffer,
 } from "../controllers/dish-controller.mjs";
 import upload from "../middlewares/upload.mjs";
-import { authenticateToken, authenticateToken2 } from "../middlewares/authentication.mjs";
+import {
+  authenticateToken,
+  authenticateToken2,
+} from "../middlewares/authentication.mjs";
 
 const dishRouter = express.Router();
 
@@ -305,7 +308,7 @@ const dishRouter = express.Router();
  *
   *@apiUse Error400
  */
-    dishRouter
+dishRouter
   .route("/")
   .get(getDishes)
   .post(authenticateToken, upload.single("dish_photo"), postDish)
@@ -393,7 +396,8 @@ const dishRouter = express.Router();
    }
  * @apiUse UnauthorizedError
  */
-dishRouter.route("/offers")
+dishRouter
+  .route("/offers")
   .get(authenticateToken, getOffers)
   .post(authenticateToken, postOffer);
 /**
@@ -602,7 +606,10 @@ dishRouter.route("/logged").get(authenticateToken, getDishWithOffers);
  * @apiUse Error400
  */
 
-
-dishRouter.route("/:id").get(authenticateToken2, getDishById).put(updateDish).delete(deleteDish);
+dishRouter
+  .route("/:id")
+  .get(authenticateToken2, getDishById)
+  .put(upload.single("dish_photo"), updateDish)
+  .delete(deleteDish);
 
 export { dishRouter };
