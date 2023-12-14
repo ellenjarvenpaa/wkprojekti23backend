@@ -18,6 +18,7 @@ const authenticateToken = (req, res, next) => {
 };
 
 // less strict token for check whether user is logged or not
+// used in getDishById controller
 const authenticateToken2 = (req, res, next) => {
   console.log('authenticateToken', req.headers);
   const authHeader = req.headers['authorization'];
