@@ -124,12 +124,14 @@ const getOffers = async (req, res, next) => {
   }
 };
 
-// api/dish/offers/:id for admin
+// api/dish/offers for admin
 const postOffer = async (req, res, next) => {
-  if (req.user) {
+  const user_level_id = req.user.user_level_id;
+  if (req.user && user_level_id === 2 || user_level_id === 1) {
     console.log("user", req.user);
     console.log('request body', req.body);
     const newOffer = req.body;
+
     const newOfferId = await addOfferByDishId(newOffer);
     if (newOfferId.error) {
       return next(new Error(newOfferId.error));

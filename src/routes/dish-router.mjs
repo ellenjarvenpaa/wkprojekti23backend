@@ -15,7 +15,56 @@ import { authenticateToken, authenticateToken2 } from "../middlewares/authentica
 const dishRouter = express.Router();
 
 // routes for '/api/dish'
+/**
+ * @apiDefine all No authentication needed.
+ */
 
+/**
+ * @apiDefine admin Admin user level token needed.
+ */
+
+/**
+ * @apiDefine token Logged in user access only
+ * Valid authentication token must be provided within request.
+ */
+
+/**
+ * @apiDefine UnauthorizedError
+ * @apiError UnauthorizedError User name or password invalid.
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 403 Forbidden
+ *     {
+ *       "error": {
+ *         "message": "username/password invalid",
+ *         "status": 401
+ *       }
+ *     }
+ */
+
+/**
+ * @apiDefine Error400
+ * @apiError Error400 Error message.
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 400
+ *    {
+ *      "error": {
+ *        "message": "error message",
+ *        "status": 400
+ *      }
+ *    }
+ */
+/**
+ * @apiDefine NotFoundError
+ * @apiError NotFoundError Not found message.
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not found
+ *    {
+ *      "error": {
+ *        "message": "Not Found - /api/usersa",
+ *        "status": 404
+ *      }
+ *    }
+ */
 /**
  * GET endpoint for dishes
  * @name GET/api/dish
@@ -186,16 +235,81 @@ const dishRouter = express.Router();
     }
  * ]
  *
- *
- *
- *
- *
  */
-dishRouter
+/**
+ *
+ * @api {post} /dish Create a new dish
+ * @apiName CreateDish
+ * @apiGroup Dish
+ * @apiPermission admin
+ * @apiDescription Create a new dish
+ *
+ * @apiHeader {String} Authorization Bearer token.
+ *
+ * @apiParam {string} dis_price The price of the dish.
+ * @apiParam {String} description Description of dish item.
+ * @apiParam {String} category_id Category id of dish item.
+ * @apiParam {File} dish_photo The file of the dish to be uploaded.
+ *
+ * @apiParamExample {form-data} Request-Example:
+ *    {
+ *      "dish_price": "pic1.jpg",
+ *      "description": "sunset",
+ *      "category_id": "sunset",
+ *       "dish_photo": "moccha.png"
+ *    }
+ *
+ * @apiSuccess {string} message Success message.
+ * @apiSuccess {number} dish_id id of the dish.
+ *
+ * @apiSuccessExample Success-Response:
+ *   HTTP/1.1 200 OK
+ * {
+    "message": "New media dish added.",
+    "dish_id": 19
+    }
+ *@apiUse UnauthorizedError
+ *@apiUse Error400
+ */
+/**
+ *
+ * @api {put} /dish Modify an existing dish
+ * @apiName ModifyDish
+ * @apiGroup Dish
+ * @apiPermission all
+ * @apiDescription Modify an existing dish
+ *
+ *
+ * @apiParam {string} dis_price The price of the dish.
+ * @apiParam {String} description Description of dish item.
+ * @apiParam {String} category_id Category id of dish item.
+ * @apiParam {File} dish_photo The file of the dish to be uploaded.
+ *
+ * @apiParamExample {form-data} Request-Example:
+ *    {
+ *      "dish_price": "pic1.jpg",
+ *      "description": "sunset",
+ *      "category_id": "sunset",
+ *       "dish_photo": "moccha.png"
+ *    }
+ *
+ * @apiSuccess {string} message Success message.
+ * @apiSuccess {number} .
+ *
+ * @apiSuccessExample Success-Response:
+ *   HTTP/1.1 200 OK
+ * {
+    "message": "Dish updated",
+
+    }
+ *
+  *@apiUse Error400
+ */
+    dishRouter
   .route("/")
   .get(getDishes)
   .post(authenticateToken, upload.single("dish_photo"), postDish)
-  .put(authenticateToken, upload.single("dish_photo"), updateDish);
+  .put(upload.single("dish_photo"), updateDish);
 
 /**
  * GET endpoint for offers
@@ -206,7 +320,7 @@ dishRouter
  * @api {get} /dish/offers Get all offers
  * @apiName GetOffers
  * @apiGroup Dish
- * @apiPermission all
+ * @apiPermission token
  * @apiDescription Get all offers
  * @apiSuccess {Object[]} offer_dishes List of offers.
  * @apiSuccess {Number} dishes.dish_id Dish id.
@@ -248,6 +362,37 @@ dishRouter
 }
  *
  */
+/**
+ * @api {post} /dish/offers Create a new offer
+ * @apiName PostOffer
+ * @apiGroup Dish
+ * @apiPermission admin
+ * @apiDescription Create a new offer for a dish
+ *
+ * @apiParam {Number} dish_id The id of the dish.
+ * @apiParam {Number} reduction Reduction percent of dish item (from 0 to 1).
+ * @apiParam {String} start_date The date when the offer starts.
+ * @apiParam {String} end_date The date when the offer ends.
+ *
+ * @apiParamExample {json} Request-Example:
+ * {
+    "dish_id": 15,
+    "reduction": 0.2,
+    "start_date": "2023-12-01",
+    "end_date": "2023-12-21"
+}
+ *
+ * @apiSuccess {String} message Success message.
+ * @apiSuccess {String} offer_id The offer id of the dish.
+ *
+ * @apiSuccessExample Success-Response:
+ *  HTTP/1.1 200 OK
+ * {
+    "message": "offer added",
+    "offer_id": 12
+   }
+ * @apiUse UnauthorizedError
+ */
 dishRouter.route("/offers")
   .get(authenticateToken, getOffers)
   .post(authenticateToken, postOffer);
@@ -260,7 +405,7 @@ dishRouter.route("/offers")
  * @api {get} /dish/logged Get all dishes with offers
  * @apiName GetDishesWithOffers
  * @apiGroup Dish
- * @apiPermission all
+ * @apiPermission token
  * @apiDescription Get all dishes with offers
  * @apiSuccess {Number} category_name Dish category name.
  * @apiSuccess {Object[]} dishes List of dishes.
@@ -434,6 +579,7 @@ dishRouter.route("/logged").get(authenticateToken, getDishWithOffers);
  * @apiName GetDishById
  * @apiGroup Dish
  * @apiPermission all
+ * @apiPermission token
  * @apiDescription Get dish by id
  * @apiParam {Number} id Dish id.
  * @apiSuccess {Number} dish_id Dish id.
@@ -445,15 +591,18 @@ dishRouter.route("/logged").get(authenticateToken, getDishWithOffers);
  * @apiSuccessExample Success-Response:
  * HTTP/1.1 200 OK
  * {
-    "dish_id": 1,
-    "dish_name": "Mango-meloni",
-    "dish_price": "3.50",
-    "description": "Laktoositon, Gluteeniton",
-    "dish_photo": "d70016c421cf929684c5c3c2e14efbf7"
+    "dish_id": 5,
+    "dish_name": "Korvapuusti",
+    "offer_price": null,
+    "dish_price": "2.90",
+    "dish_photo": "fed951a512639fd51371003c50238a0f",
+    "description": "Tehty omassa leipomossa"
  * }
  *
- *
+ * @apiUse Error400
  */
+
+
 dishRouter.route("/:id").get(authenticateToken2, getDishById).put(updateDish).delete(deleteDish);
 
 export { dishRouter };
