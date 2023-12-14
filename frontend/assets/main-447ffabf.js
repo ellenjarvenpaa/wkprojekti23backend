@@ -1,4 +1,4 @@
-import{e as b,s as k,a as l,m as D,b as E}from"./style-17c7d77a.js";import{f as h}from"./function-19f4931a.js";const f=async(e,t={})=>{const o=await fetch(e,t);if(!o.ok)throw new Error(`Error ${o.status} occured`);return o.json()},w=await f(l+"api/dish");w.forEach(e=>{const o=(()=>{let n=`
+import{e as b,s as k,a as l,m as D,b as E}from"./style-ce433336.js";import{f as h}from"./function-19f4931a.js";const f=async(e,t={})=>{const o=await fetch(e,t);if(!o.ok)throw new Error(`Error ${o.status} occured`);return o.json()},w=await f(l+"api/dish");w.forEach(e=>{const o=(()=>{let n=`
 		<h2 id="${e.category_name}">${e.category_name}</h2>
 		<ul class="menu-list">
 		`;return e.dishes.forEach(i=>{const{dish_photo:m,dish_name:u,dish_price:c,dish_id:r}=i;n+=`

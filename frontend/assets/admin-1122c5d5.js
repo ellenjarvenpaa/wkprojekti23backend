@@ -1,4 +1,4 @@
-import{a as i}from"./style-17c7d77a.js";const m=async(e,o={})=>{const t=await fetch(e,o);if(!t.ok)throw new Error(`Error ${t.status} occured`);return t.json()},y=async()=>{const e=localStorage.getItem("token");if(console.log(e),!e)console.log(window.location.href),window.location.href.includes("login-admin.html")||(window.location.href="login-admin.html");else return!0};y();const f=await m(i+"api/dish");f.forEach(e=>{const t=(()=>{let n=`
+import{a as i}from"./style-ce433336.js";const m=async(e,o={})=>{const t=await fetch(e,o);if(!t.ok)throw new Error(`Error ${t.status} occured`);return t.json()},y=async()=>{const e=localStorage.getItem("token");if(console.log(e),!e)console.log(window.location.href),window.location.href.includes("login-admin.html")||(window.location.href="login-admin.html");else return!0};y();const f=await m(i+"api/dish");f.forEach(e=>{const t=(()=>{let n=`
 		<h2 id="${e.category_name}">${e.category_name}</h2>
 		<ul class="menu-list">
 	`;return e.dishes.forEach(r=>{const{dish_name:a,dish_price:l,dish_photo:d,dish_id:c}=r;n+=`
