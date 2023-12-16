@@ -38,12 +38,11 @@ CREATE TABLE Dishes (
     created_at TIMESTAMP NOT NULL,
     FOREIGN KEY (category_id) REFERENCES Categories(category_id)
 );
-
 CREATE TABLE Offers (
     offer_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     dish_id INT NOT NULL,
-    -- offer_price DECIMAL(6,2) NOT NULL,
     reduction DECIMAL(6,2) NOT NULL,
+    active BOOLEAN NOT NULL DEFAULT 0,
     CHECK (reduction BETWEEN 0 AND 1),
     created_at TIMESTAMP NOT NULL,
     start_date DATE NOT NULL,
@@ -110,6 +109,8 @@ VALUES('Mango-meloni', 3.5, 'Laktoositon, Gluteeniton', 1, 'd70016c421cf929684c5
     ('Americano', 3.5, 'Piristys päivään', 5, '7fda39be6fac103af0a5eb3ce9cdadfb'),
     ('Latte', 3.5, 'Pyydettäessä erikois maitoon', 5, 'cbc141b3cd0dbedac60dfa7d8dfbbdf1'),
     ('Mocha', 3.5, 'Pyydettäessä erikois maitoon', 5, '56f8c57e52f4f55adcc459a5ccd94d76');
+
+
 
 
 -- ORDER START: 1. 1pulla(dish id 5) first
