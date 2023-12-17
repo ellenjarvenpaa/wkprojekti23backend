@@ -8,18 +8,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Agbalumo&family=Caprasimo&display=swap" rel="stylesheet">
-    <title>Vite + TS</title>
-    <script type="module" crossorigin src="./assets/main-447ffabf.js"></script>
-    <link rel="modulepreload" crossorigin href="./assets/style-ce433336.js">
+    <title>Jälkkäri Vite + TS</title>
+    <script type="module" crossorigin src="./assets/main-67d5fe5e.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/style-3a8f6227.js">
     <link rel="modulepreload" crossorigin href="./assets/function-19f4931a.js">
-    <link rel="stylesheet" href="./assets/style-77080e39.css">
+    <link rel="stylesheet" href="./assets/style-90c205bb.css">
   </head>
   <body>
     <div class="container">
       <nav>
         <ul class="nav">
           <li class="nav-item discount hidden">
-            <a href="#offer">
+            <a href="#offers">
               <img class="nav-img" src="./assets/discounts-promotion-e3557d6d.png" alt="discounts-promotion">
             </a>
           </li>
@@ -72,11 +72,12 @@
         <div class="quantity-container">
           <h3>Määrä</h3>
           <div class="quantity">
-            <button id="quantity-minus" class="button" type="button">
+            <button class="quantity-minus" class="button" type="button">
               <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACASURBVGhD7dPBDoIwEEXR7hDc6LcDKnyfroRvgPf2mDhshoR7krvttKUUAAAAAADw01Xdk/Ls3S5qVB81J+XZg/Jewh5qOUidCmmUb2BrsYwmVau/He0AXxU6gPVqa7GMWhXmH+el3sqfMCPPfqpK7ebndEsq/GwAAAAAADiHUla54M8qiMKcCAAAAABJRU5ErkJggg==" alt="minus sign">
             </button>
             <input type="number" class="quantity-number" value="1">
-            <button id="quantity-plus" class="button" type="button">
+            <!-- <div class="quantity-number">1</div> -->
+            <button class="quantity-plus" class="button" type="button">
               <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAE2SURBVGhD7ZhLTsMwFEUzK4UJ7QooS+bTH8trGfXDClC5R8rI8kN2QHq29I50Jo0S5yZOc50hCILgN+5Hu+NOvsvP0bfxt274kLfEneyCB3mVaYCL7GI6LeWXTAMQaiGbh5PkaqcBzvJRNk8E8CYCeBMBvIkA3lAlrAAuVYIT4qqW+iytLrSSuX0sGXsy1N+9pA4zeKn0oG+ZBuA3guX2sWRsWuykKr6W6Ul4yXqiCuYqVyB3MA95fuaymNYCnGRVAGBJmDuYh6+yGh6crTxKbmGp3DnrIWZbbh9Lxt7ImZwM04kXUKlP0vobZVtuH8vqafMfNPciq4UXkBWAq9o8EcCbCOBNBPAmAnjT/cdd6/M6d6CLKgEsRdMAtMpuoIqzDKQOH+SL/FMl9oI67FKJgyDogmH4AVDmeq5/Ko9AAAAAAElFTkSuQmCC" alt="plus sign">
             </button>
           </div>
@@ -105,11 +106,55 @@
     <dialog id="shopping-cart-dialog">
       <section class="shopping-cart">
           <h2>Ostoskori</h2>
-          <div class="menu-item">
-            <img class="menu-img" src="./assets/meltingicecream-e3676eef.png" alt="Coca-Cola drink">
+          <!-- <div class="menu-item">
+            <img class="menu-img" src="img/meltingicecream.png" alt="Coca-Cola drink">
             <div>
               <p class="menu-item-name">No items added yet</p>
             </div>
+          </div> -->
+          <div class="cart-item-list">
+            <div class="cart-item-row">
+
+              <div class="cart-item">
+                <p>Punainen sametti</p>
+              </div>
+              <div class="cart-item-price">
+                <span class="price">4.00</span><span>&#x20AC;</span>
+              </div>
+              <div class="quantity">
+                <button class="button minus-btn" type="button">
+                  <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACASURBVGhD7dPBDoIwEEXR7hDc6LcDKnyfroRvgPf2mDhshoR7krvttKUUAAAAAADw01Xdk/Ls3S5qVB81J+XZg/Jewh5qOUidCmmUb2BrsYwmVau/He0AXxU6gPVqa7GMWhXmH+el3sqfMCPPfqpK7ebndEsq/GwAAAAAADiHUla54M8qiMKcCAAAAABJRU5ErkJggg==" alt="minus sign">
+                </button>
+                <input type="number" class="cart-quantity-number" value="1">
+                <button class="button plus-btn" type="button">
+                  <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAE2SURBVGhD7ZhLTsMwFEUzK4UJ7QooS+bTH8trGfXDClC5R8rI8kN2QHq29I50Jo0S5yZOc50hCILgN+5Hu+NOvsvP0bfxt274kLfEneyCB3mVaYCL7GI6LeWXTAMQaiGbh5PkaqcBzvJRNk8E8CYCeBMBvIkA3lAlrAAuVYIT4qqW+iytLrSSuX0sGXsy1N+9pA4zeKn0oG+ZBuA3guX2sWRsWuykKr6W6Ul4yXqiCuYqVyB3MA95fuaymNYCnGRVAGBJmDuYh6+yGh6crTxKbmGp3DnrIWZbbh9Lxt7ImZwM04kXUKlP0vobZVtuH8vqafMfNPciq4UXkBWAq9o8EcCbCOBNBPAmAnjT/cdd6/M6d6CLKgEsRdMAtMpuoIqzDKQOH+SL/FMl9oI67FKJgyDogmH4AVDmeq5/Ko9AAAAAAElFTkSuQmCC" alt="plus sign">
+                </button>
+              </div>
+              <button class="button remove-btn">Poista</button>
+            </div>
+            <div class="cart-item-row">
+
+              <div class="cart-item">
+                <p>Punainen sametti</p>
+              </div>
+              <div class="cart-item-price">
+                <span class="price">3.00</span><span>&#x20AC;</span>
+              </div>
+              <div class="quantity">
+                <button class="button minus-btn quantity-plus" type="button">
+                  <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACASURBVGhD7dPBDoIwEEXR7hDc6LcDKnyfroRvgPf2mDhshoR7krvttKUUAAAAAADw01Xdk/Ls3S5qVB81J+XZg/Jewh5qOUidCmmUb2BrsYwmVau/He0AXxU6gPVqa7GMWhXmH+el3sqfMCPPfqpK7ebndEsq/GwAAAAAADiHUla54M8qiMKcCAAAAABJRU5ErkJggg==" alt="minus sign">
+                </button>
+                <input type="number" class="cart-quantity-number" value="1">
+                <button class="button plus-btn quantity-minus" type="button">
+                  <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAE2SURBVGhD7ZhLTsMwFEUzK4UJ7QooS+bTH8trGfXDClC5R8rI8kN2QHq29I50Jo0S5yZOc50hCILgN+5Hu+NOvsvP0bfxt274kLfEneyCB3mVaYCL7GI6LeWXTAMQaiGbh5PkaqcBzvJRNk8E8CYCeBMBvIkA3lAlrAAuVYIT4qqW+iytLrSSuX0sGXsy1N+9pA4zeKn0oG+ZBuA3guX2sWRsWuykKr6W6Ul4yXqiCuYqVyB3MA95fuaymNYCnGRVAGBJmDuYh6+yGh6crTxKbmGp3DnrIWZbbh9Lxt7ImZwM04kXUKlP0vobZVtuH8vqafMfNPciq4UXkBWAq9o8EcCbCOBNBPAmAnjT/cdd6/M6d6CLKgEsRdMAtMpuoIqzDKQOH+SL/FMl9oI67FKJgyDogmH4AVDmeq5/Ko9AAAAAAElFTkSuQmCC" alt="plus sign">
+                </button>
+
+              </div>
+              <button class="button remove-btn">Poista</button>
+            </div>
+          </div>
+          <div class="cart-total">
+            <p>Total: </p><span id="cart-total">7.00</span><span>&#x20AC;</span>
           </div>
           <div class="buttons">
             <button type="button" class="button" id="back-btn-cart">Takaisin</button>

@@ -9,9 +9,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Agbalumo&family=Caprasimo&display=swap" rel="stylesheet">
   <title>Jälkkäri Admin</title>
-  <script type="module" crossorigin src="../assets/style-ce433336.js"></script>
-  <script type="module" crossorigin src="../assets/admin-1122c5d5.js"></script>
-  <link rel="stylesheet" href="../assets/style-77080e39.css">
+  <script type="module" crossorigin src="../assets/style-3a8f6227.js"></script>
+  <script type="module" crossorigin src="../assets/admin-4472903f.js"></script>
+  <link rel="stylesheet" href="../assets/style-90c205bb.css">
 </head>
 <body>
   <div class="admin-container">
@@ -43,6 +43,7 @@
         </li>
       </ul>
     </nav>
+
     <div class="menu-container menu-admin">
       <ul class="menu-items">
       </ul>
@@ -52,18 +53,18 @@
     <section>
       <h2 id="modify-title">Tuotteen muokkaaminen</h2>
       <form id="item-modify-form" class="form">
-          <label class="required" for="name">Nimi</label><br>
-          <input type="text" name="dish_name" required/>
+          <label for="name">Nimi</label><br>
+          <input type="text" name="dish_name"/>
 
-          <label class="required" for="price">Hinta</label><br>
-          <input type="text" name="dish_price" required />
+          <label for="price">Hinta</label><br>
+          <input type="text" pattern="([0-9]*[\.]{0,1}[0-9]{0,2})" title="price with 2 decimals" name="dish_price" />
 
           <label for="description">Kuvaus</label><br>
           <!-- <input type="text" name="description"/> -->
           <textarea name="description" id="description" cols="30" rows="4"></textarea> <br>
 
-          <label class="required" for="category">Kategory</label><br>
-          <select name="category_id" id="">
+          <label for="category">Kategory</label><br>
+          <select name="category_id">
             <option value="1">Jäätelöt</option>
             <option value="2">Leivonnaiset</option>
             <option value="3">Kakut</option>
@@ -82,15 +83,20 @@
   <dialog id="delete-item-dialog">
     <section>
       <h2 id="delete-title">Poista annos</h2>
-      <div class="delete-content">
-        <p>Haluatko varmasti poistaa kaikki annoksen tiedot?</p>
-      </div>
-      <div class="buttons">
-        <button type="button" class="button back-btn" id="delete-back-btn">Takaisin</button>
-        <input type="submit" value="Poista" class="button delete-btn" required>
-      </div>
+      <form id="item-delete-form" class="form">
+
+        <div class="delete-content">
+          <p>Haluatko varmasti poistaa kaikki annoksen tiedot?</p>
+        </div>
+        <div class="buttons">
+          <button type="button" class="button back-btn" id="delete-back-btn">Takaisin</button>
+          <input type="submit" value="Poista" class="button delete-btn" required>
+        </div>
       </form>
     </section>
+  </dialog>
+  <dialog id="info">
+
   </dialog>
 </body>
 </html>
