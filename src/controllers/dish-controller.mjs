@@ -165,45 +165,68 @@ const getDishWithOffers = async (req, res, next) => {
 };
 
 const updateDish = async (req, res, next) => {
-  const dish_id = req.params.id;
-  const { dish_name, dish_price, description, category_id } = req.body;
-  let dish_photo = "",
-    filesize = 0,
-    media_type = "";
-  if (req.file) {
-    dish_photo = req.file.filename;
-    filesize = req.file.size;
-    media_type = req.file.media_type;
-  }
-  if (dish_name || dish_price || description || category_id || dish_photo) {
-    const updatedDishes = {
-      dish_name,
-      dish_price,
-      dish_photo,
-      filesize,
-      media_type,
-      description,
-      category_id,
-      dish_id,
-    };
-    console.log(updatedDishes);
-    const result = await updateDishById(dish_id, updatedDishes);
-    console.log(result);
-    res.status(200).json({ message: "Dish updated.", ...result });
+  if (req.user && (req.user.user_level_id === 2 || req.user.user_level_id === 1)) {
+    const dish_id = req.params.id;
+    const { dish_name, dish_price, description, category_id } = req.body;
+    console.log('request body', req.body);
+    console.log('req.file', req.file);
+    let filename = '', mimetype = '', size = '';
+    if (req.file) {
+      filename = req.file.filename;
+      mimetype = req.file.mimetype;
+      size = req.file.size;
+    }
+    if (dish_name || dish_price || description || category_id || filename) {
+      const updatedDishes = {
+        dish_name,
+        dish_price,
+        filename,
+        size,
+        mimetype,
+        description,
+        category_id,
+      };
+      console.log(updatedDishes);
+      const result = await updateDishById(dish_id,updatedDishes);
+      console.log(result);
+      res.status(200).json({ message: "Dish updated.", ...result });
+    } else {
+      const error = new Error(
+        "Missing required data. Please provide at least one field for update."
+      );
+      error.status = 400;
+      res.status(400).json({ message: error.message });
+    }
   } else {
-    const error = new Error(
-      "Missing required data. Please provide at least one field for update."
-    );
-    error.status = 400;
-    res.status(400).json({ message: error.message });
+    const error = new Error('unauthorized');
+    error.status = 401;
+    next(error);
   }
 };
 
 const deleteDish = async (req, res, next) => {
-  const dish_id = req.params.id;
-  const result = await deleteDishById(dish_id);
-  console.log(result);
-  res.status(200).json({ message: "Dish deleted.", ...result });
+  console.log(req.user.user_level_id + '***');
+  console.log(req.user.user_level_id === 2);
+  if (req.user && (req.user.user_level_id === 1 || req.user.user_level_id === 2)) {
+
+    const result = await deleteDishById(req.params.id);
+    if (result) {
+      if(result.error) {
+        next(new Error(result.error));
+      }
+      if (result.affectedRows === 1) {
+        res.status(202).json({message: "dish deleted"});
+      } else {
+        const error = new Error('wrong user');
+        error.status = 401;
+        next(error);
+      }
+    } else {
+      next(new Error('dish not found'));
+    }
+	} else {
+	  res.sendStatus(401);
+	}
 };
 
 export {

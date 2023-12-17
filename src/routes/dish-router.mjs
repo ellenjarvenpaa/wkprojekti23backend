@@ -274,45 +274,12 @@ const dishRouter = express.Router();
  *@apiUse UnauthorizedError
  *@apiUse Error400
  */
-/**
- *
- * @api {put} /dish Modify an existing dish
- * @apiName ModifyDish
- * @apiGroup Dish
- * @apiPermission all
- * @apiDescription Modify an existing dish
- *
- *
- * @apiParam {string} dis_price The price of the dish.
- * @apiParam {String} description Description of dish item.
- * @apiParam {String} category_id Category id of dish item.
- * @apiParam {File} dish_photo The file of the dish to be uploaded.
- *
- * @apiParamExample {form-data} Request-Example:
- *    {
- *      "dish_price": "pic1.jpg",
- *      "description": "sunset",
- *      "category_id": "sunset",
- *       "dish_photo": "moccha.png"
- *    }
- *
- * @apiSuccess {string} message Success message.
- * @apiSuccess {number} .
- *
- * @apiSuccessExample Success-Response:
- *   HTTP/1.1 200 OK
- * {
-    "message": "Dish updated",
 
-    }
- *
-  *@apiUse Error400
- */
 dishRouter
   .route("/")
   .get(getDishes)
   .post(authenticateToken, upload.single("dish_photo"), postDish)
-  .put(upload.single("dish_photo"), updateDish);
+  // .put(upload.single("dish_photo"), updateDish);
 
 /**
  * GET endpoint for offers
@@ -606,10 +573,44 @@ dishRouter.route("/logged").get(authenticateToken, getDishWithOffers);
  * @apiUse Error400
  */
 
+    /**
+ *
+ * @api {put} /dish/:id Modify an existing dish
+ * @apiName ModifyDish
+ * @apiGroup Dish
+ * @apiPermission all
+ * @apiDescription Modify an existing dish
+ *
+ *
+ * @apiParam {string} dis_price The price of the dish.
+ * @apiParam {String} description Description of dish item.
+ * @apiParam {String} category_id Category id of dish item.
+ * @apiParam {File} dish_photo The file of the dish to be uploaded.
+ *
+ * @apiParamExample {form-data} Request-Example:
+ *    {
+ *      "dish_price": "pic1.jpg",
+ *      "description": "sunset",
+ *      "category_id": "sunset",
+ *       "dish_photo": "moccha.png"
+ *    }
+ *
+ * @apiSuccess {string} message Success message.
+ * @apiSuccess {number} .
+ *
+ * @apiSuccessExample Success-Response:
+ *   HTTP/1.1 200 OK
+ * {
+    "message": "Dish updated.",
+    "affectedRows": 1
+    }
+ *
+  *@apiUse Error400
+ */
 dishRouter
   .route("/:id")
   .get(authenticateToken2, getDishById)
-  .put(upload.single("dish_photo"), updateDish)
-  .delete(deleteDish);
+  .put(authenticateToken, upload.single("dish_photo"), updateDish)
+  .delete(authenticateToken, deleteDish);
 
 export { dishRouter };

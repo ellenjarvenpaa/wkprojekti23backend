@@ -78,7 +78,7 @@ const postLoginAdmin = async (req, res, next) => {
         //poista pw json ennen palautta
         delete user.password;
         // sign user to my secret chacracters
-        const token = jwt.sign(user, process.env.JWT_SECRET, {expiresIn: '24h'});
+        const token = jwt.sign(user, process.env.JWT_SECRET);
         res.json({message: "logged in", token, user});
       } else {
         const error = new Error('you are not an admin');

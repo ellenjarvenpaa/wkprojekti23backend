@@ -187,22 +187,34 @@ const fetchDishesWithOffers = async () => {
  *
  */
 const updateDishById = async (dish_id, data) => {
-  const sql = `UPDATE Dishes SET dish_name = ?, dish_price = ?, dish_photo = ?, filesize = ?,
-  media_type = ?, description = ?, category_id = ? WHERE dish_id = ?`;
-  const params = [
-    data.dish_name,
-    data.dish_price,
-    data.dish_photo,
-    data.filesize,
-    data.media_type,
-    data.description,
-    data.category_id,
-    dish_id,
-  ];
+  const dataToUpdate = {
+    dish_name: data.dish_name,
+    dish_price: data.dish_price,
+    dish_photo: data.filename,
+    filesize: data.size,
+    media_type: data.mimetype,
+    description: data.description,
+    category_id: data.category_id,
+  };
+
+  const dataToUpdateKeys = Object.keys(dataToUpdate);
+  dataToUpdateKeys.forEach((d) => {
+    // if data is null, delete it from the data to be execute
+    if(!dataToUpdate[d]) {
+      delete dataToUpdate[d];
+    };
+  });
+  console.log('dataNotNull', dataToUpdate);
+  const inserts = dataToUpdate;
+  const sql = promisePool.format(`UPDATE Dishes SET ? WHERE dish_id = ?`, [inserts, dish_id]);
+
   try {
-    const result = await promisePool.query(sql, params);
-    console.log("result", result);
-    return { dish_id: result[0].insertId };
+    const [resultHeader] = await promisePool.execute(sql);
+    console.log("result", resultHeader);
+    if (resultHeader.affectedRows === 0) {
+      throw new Error('dish is not updated');
+    }
+    return {affectedRows: resultHeader.affectedRows};
   } catch (error) {
     console.error("Database error:", error);
     return { success: false, message: "Internal Server Error" };
@@ -218,14 +230,12 @@ const updateDishById = async (dish_id, data) => {
  */
 
 const deleteDishById = async (dish_id) => {
-  const sql = `ALTER TABLE Offers DROP FOREIGN KEY offers_ibfk_1`;
-  `ALTER TABLE Offers ADD CONSTRAINT offers_ibfk_1 FOREIGN KEY
-  dish_id REFERENCES Dishes dish_id ON DELETE CASCADE`;
+  const sql = `DELETE FROM Dishes WHERE dish_id = ?; `;
   const params = [dish_id];
   try {
     const result = await promisePool.query(sql, params);
     console.log("result", result);
-    return { dish_id: result[0].insertId };
+    return result[0];
   } catch (error) {
     console.error("Database error:", error);
     return { success: false, message: "Internal Server Error" };
@@ -248,6 +258,7 @@ const deleteDishById = async (dish_id) => {
 // }
 
 // first, set active = 0 to all rows with the dish id to be inserted,
+// exluding the dish which has end date < this offer start date
 // then insert dish new offer
 const addOfferByDishId = async (offer) => {
   const connection = await promisePool.getConnection();
@@ -255,11 +266,14 @@ const addOfferByDishId = async (offer) => {
   try {
     const {dish_id, reduction, start_date, end_date} = offer;
     await connection.beginTransaction();
-    const sql1 = `UPDATE Offers SET active = 0 WHERE dish_id = ${dish_id};`;
+    const sql1 = `UPDATE Offers SET active = 0 WHERE dish_id = ${dish_id} AND end_date > '${start_date}';`;
+    console.log(sql1);
     const result1 = await connection.query(sql1);
     console.log(result1);
     const sql2 = `INSERT INTO Offers(dish_id, reduction, start_date, end_date, active)
     VALUES(?, ?, ?, ?, ?);`;
+
+    console.log(start_date, end_date);
     const params = [dish_id, reduction, start_date, end_date, 1];
     const result2 = await connection.query(sql2, params);
     result = result2[0].insertId;

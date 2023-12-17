@@ -49,7 +49,7 @@ CREATE TABLE Offers (
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     CHECK (start_date <= end_date),
-    FOREIGN KEY (dish_id) REFERENCES Dishes(dish_id)
+    FOREIGN KEY (dish_id) REFERENCES Dishes(dish_id) ON DELETE CASCADE
 );
 
 -- payment_status: 'paid' tai 'unpaid'/ DEFAULT 'unpaid'
@@ -116,3 +116,12 @@ SET active = 0
 WHERE dish_id = 5;
 INSERT INTO Offers(dish_id, reduction, start_date, end_date, active)
 VALUES(5, 0.1, '2023-12-07', '2023-12-31', 1);
+
+UPDATE Offers
+SET active = 0
+WHERE dish_id = 4 AND end_date > '2023-12-18';
+INSERT INTO Offers(dish_id, reduction, start_date, end_date, active)
+VALUES(4, 0.5, '2023-12-18', '2023-12-18', 1);
+
+
+DELETE FROM Dishes WHERE dish_id = 2;
